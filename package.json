@@ -1,0 +1,71 @@
+{
+  "name": "smart-billing",
+  "version": "1.0.0",
+  "description": "A Quasar Framework App for SMB",
+  "productName": "Smart Billing System",
+  "cordovaId": "org.cordova.quasar.smartbilling",
+  "author": "Dmitriy Grigorev <dimag@inbox.ru>",
+  "private": true,
+  "scripts": {
+    "lint": "eslint --ext .js,.vue src",
+    "test": "echo \"See package.json => scripts for available tests.\" && exit 0",
+    "test:unit": "jest --updateSnapshot",
+    "test:unit:coverage": "jest --coverage",
+    "test:unit:watch": "jest --watch",
+    "test:unit:watchAll": "jest --watchAll",
+    "serve:test:coverage": "quasar serve test/jest/coverage/lcov-report/ --port 8788",
+    "concurrently:dev:jest": "concurrently \"quasar dev\" \"jest --watch\"",
+    "test:unit:ui": "majestic",
+    "test:e2e": "cypress open",
+    "test:e2e:CI": "cypress run",
+    "deploy:staging": "cross-env QENV=staging firebase deploy -P staging --only hosting",
+    "deploy:prod": "cross-env QENV=production firebase deploy -P default --only hosting",
+    "build": "cross-env QENV=production quasar build -m pwa",
+    "dev": "cross-env QENV=staging quasar dev",
+    "staging": "cross-env QENV=staging quasar dev",
+    "build:staging": "cross-env QENV=staging quasar build -m pwa",
+    "dev:development": "cross-env QENV=development quasar dev",
+    "dev:local": "cross-env QENV=local quasar dev"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.10.0",
+    "axios": "^0.21.1",
+    "chokidar": "^3.5.0",
+    "core-js": "^3.6.5",
+    "cross-env": "^7.0.2",
+    "quasar": "^1.15.10",
+    "rollbar": "^2.19.4",
+    "vue-i18n": "^8.24.3",
+    "vuelidate": "^0.7.5"
+  },
+  "devDependencies": {
+    "@quasar/app": "^2.2.3",
+    "@quasar/quasar-app-extension-qenv": "^1.1.0",
+    "babel-eslint": "^10.0.1",
+    "cheerio": "^1.0.0-rc.2",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-loader": "^3.0.3",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.1.2"
+  },
+  "engines": {
+    "node": ">= 10.18.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "browserslist": [
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ]
+}
