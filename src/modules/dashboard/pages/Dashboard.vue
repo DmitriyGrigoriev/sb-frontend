@@ -49,7 +49,6 @@ export default {
     ReleasesComponent,
     PageContainer,
     PageTitle,
-
     ShortCuts
   },
   computed: {
