@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { handleError } from '@/utils'
+// import { handleError } from '@/utils'
 import { storageService } from './storage.service'
 import { REFRESH_TOKEN } from '@/queries'
 import store from '@/store'
@@ -55,7 +55,7 @@ const apiService = {
   // Response interceptor
   mount401Interceptor () {
     this._401interceptor = axios.interceptors.response.use(
-      (response) => {
+      (response) => {response
         return response
       },
       async (error) => {
@@ -81,7 +81,7 @@ const apiService = {
             }
           }
         }
-        handleError(error)
+        // handleError(error)
         // If error was not 401 just reject as is
         throw error
       }
