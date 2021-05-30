@@ -1,9 +1,9 @@
 <template>
   <q-layout view="lHr LpR lfr">
-    <q-header bordered class="bg-accent">
-      <app-header></app-header>
+    <q-header bordered>
+<!--      <app-header></app-header>-->
 
-      <q-separator color="secondary" class="header-separator" />
+<!--      <q-separator color="secondary" class="header-separator" />-->
     </q-header>
 
     <q-drawer
@@ -39,7 +39,7 @@
 
     <q-footer
       bordered
-      class="bg-info text-secondary text-lowercase items-center"
+      class="text-lowercase items-center"
     >
       <app-footer></app-footer>
     </q-footer>
@@ -52,18 +52,19 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import AppHeader from '@/ui/components/Header'
+// import AppHeader from '@/ui/components/Header'
 import AppFooter from '@/ui/components/Footer'
 import AppMenu from '@/ui/components/Menu'
 import UserInfo from '@/ui/components/UserInfo'
 // import AppSidebar from '@/ui/components/Sidebar'
 // import RouteTabs from '@/ui/components/RouteTabs'
 // import gql from 'graphql-tag';
+// import { handleError } from '@/utils'
 
 export default {
   components: {
     AppFooter,
-    AppHeader,
+    // AppHeader,
     // AppSidebar,
     // RouteTabs
     AppMenu,
@@ -78,6 +79,7 @@ export default {
       appTitleFooter: process.env.APP_NAME,
       copyright: process.env.COPYRIGHT,
       showAbout: false,
+      errors: null,
       tabs: [
         {
           label: 'Dashboard',
@@ -128,9 +130,9 @@ export default {
     mini () {
       return this.$q.screen.sm
     }
-    // isAdmin () {
-    //   return this.$store.getters['auth/isAdmin']
-    // },
+  },
+  created () {
+    this.errors = {}
   },
   methods: {
     drawerClick (e) {
