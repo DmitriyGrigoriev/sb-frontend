@@ -14,6 +14,16 @@ export const restQLErrorMessages = errorsFromCatch => {
   return messages
 }
 
+export function hasErrors (errors, field) {
+  try {
+    if (Array.isArray(errors) && errors.length && String(field)) {
+      return errors.some(item => item.id === field)
+    }
+  } catch (e) {
+    return false
+  }
+}
+
 export const showRestQLErrorMessage = error => {
   if (typeof error !== 'undefined') {
     if (typeof error.response !== 'undefined' &&

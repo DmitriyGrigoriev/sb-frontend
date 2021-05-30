@@ -5,15 +5,19 @@
  * It is a boot file to ensure that it runs even before the app is loaded
  *
  */
-
+// import store from '@/store'
 import { Dialog } from 'quasar'
 import { storageService } from '@/services/storage.service'
 
 export default ({ router, store }) => {
   router.beforeEach((to, from, next) => {
     const token = storageService.getToken()
-    const user = store.state.auth.user
-    const role = user ? (user.role ? user.role.name : 'guest') : 'guest'
+    // const user = store.state.auth.user
+    const isAdmin = store.getters['auth/isAdmin']
+    const isSuperuser = store.getters['auth/isSuperuser']
+    const isEncoder = store.getters['auth/isEncoder']
+    const isReviewer = store.getters['auth/isReviewer']
+    // const role = user ? (user.role ? user.role.name : 'guest') : 'guest'
     // console.log(`user: ${user} role: ${role}, token: ${!!token}`)
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -24,7 +28,7 @@ export default ({ router, store }) => {
         })
       } else {
         if (to.matched.some(record => record.meta.isAdmin)) {
-          if (role === 'administrator' || role === 'superuser') {
+          if (isAdmin || isSuperuser) {
             next()
           } else {
             Dialog.create({
@@ -38,7 +42,7 @@ export default ({ router, store }) => {
             next({ name: 'dashboard' })
           }
         } else if (to.matched.some(record => record.meta.isEncoder)) {
-          if (role === 'encoder') {
+          if (isEncoder) {
             next()
           } else {
             Dialog.create({
@@ -52,7 +56,7 @@ export default ({ router, store }) => {
             next({ name: 'index-project' })
           }
         } else if (to.matched.some(record => record.meta.isReviewer)) {
-          if (role === 'reviewer') {
+          if (isReviewer) {
             next()
           } else {
             Dialog.create({

@@ -6,26 +6,23 @@
 
 <script>
 import { storageService } from '@/services/storage.service'
-// import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 // import { GET_CURRENT_USER } from './graphql/queries'
 // import {
 //   ASSIGNED_ROLE,
 //   ASSIGNED_OPERATING_UNIT_TO_REVIEW,
 //   TRANSFERRED_PROJECT
 // } from '@/graphql/subscriptions'
-// import { LocalStorage } from 'quasar'
-// import { Notify, LocalStorage } from 'quasar'
-// import { showSuccessNotification } from '@/functions/function-show-notifications'
 
 export default {
   name: 'App',
-  // computed: {
-  //   ...mapState('settings', ['dark']),
+  computed: {
+    ...mapState('settings', ['dark'])
   //   ...mapGetters('auth', ['user']),
   //   user_id () {
   //     return this.user ? this.user.id : null
   //   }
-  // },
+  },
   created () {
     const token = storageService.getToken()
     if (token) {

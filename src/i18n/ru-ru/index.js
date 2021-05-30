@@ -6,9 +6,12 @@
 
 export default {
   messages: {
-    loading: 'Загрузка',
-    saved: 'Данные успешно сохранены',
-    delete: 'Данные успешно удалены'
+    event: {
+      loading: 'Загрузка',
+      save: 'Данные записаны.',
+      delete: 'Данные удалены.',
+      error: 'Произошла ошибка.'
+    }
   },
   labels: {
     name: 'Имя',
@@ -16,20 +19,78 @@ export default {
     sort: 'Сортировка'
   },
   buttons: {
-    ok: 'Ok',
-    send: 'Отправить',
-    add: 'Добавить',
-    edit: 'Правка',
-    search: 'Поиск',
-    delete: 'Удалить',
-    close: 'Закрыть',
-    save: 'Сохранить',
-    cancel: 'Отмена',
-    select: 'Выбор',
-    logout: 'Выход',
-    getStarted: 'Быстрый старт',
-    learnMore: 'Узнать больше',
-    gotoApp: 'перейти в приложение'
+    ok: {
+      label: 'OK'
+    },
+    send: {
+      label: 'Отправить'
+    },
+    add: {
+      label: 'Добавить'
+    },
+    addrow: {
+      label: 'Добавить',
+      tooltip: 'Добавление новой строки.'
+    },
+    deleterow: {
+      label: 'Удалить',
+      tooltip: 'Удаление выделенной строки.'
+    },
+    edit: {
+      label: 'Правка'
+    },
+    help: {
+      label: 'Помощь'
+    },
+    search: {
+      label: 'Поиск',
+      placeholder: 'Поиск...'
+    },
+    delete: {
+      label: 'Удалить'
+    },
+    close: {
+      label: 'Закрыть'
+    },
+    submit: {
+      label: 'Сохранить'
+    },
+    reset: {
+      label: 'Очистить'
+    },
+    cancel: {
+      label: 'Отмена'
+    },
+    select: {
+      label: 'Выбор'
+    },
+    logout: {
+      label: 'Выход'
+    },
+    get_started: {
+      label: 'Быстрый старт'
+    },
+    learn_more: {
+      label: 'Узнать больше'
+    },
+    goto_app: {
+      label: 'перейти в приложение'
+    },
+    fullscreen: {
+      tooltip: 'Полноэкранный режим'
+    },
+    refresh: {
+      label: 'Обновить',
+      tooltip: 'Повторная загрузка данных с сервера'
+    },
+    download: {
+      label: 'Скачвть',
+      tooltip: 'Скачать данные с сервера'
+    },
+    filter: {
+      label: 'Фильтр',
+      tooltip: 'Установить фильтр'
+    }
   },
   notify: {
     default: {
@@ -49,8 +110,9 @@ export default {
   },
   table: {
     props: {
-      rowsperpage: 'Строк на странице',
-      nodata: 'Нет данных',
+      no_data_available: 'Запрос не вернул данные',
+      rows_per_page: 'Строк на странице',
+      no_filter_result: 'Для этого выражения фильтра нет данных',
       loading: 'Загрузка...'
     }
   },
@@ -106,7 +168,7 @@ export default {
         'Данная учётная запись неактивна.' +
         'Пожалуйста, проверьте электронную почту и подтвердите электронный адрес для этого аккаунта.',
       invalid_credentials:
-        'Произошла ошибка при входе в аккаунт. ' +
+        'Срок действия вашего токена истёк. ' +
         'Возможные причины произошедшего: ' +
         '1)Вы ошиблись при вводе почты или пароля ' +
         '2)Вы не активировали свою учётную запись ' +
@@ -155,8 +217,8 @@ export default {
     logout: {
       logout_confirmation: 'Вы уверены, что хотите выйти из системы?',
       confirm: 'Подтверждение',
-      logout: '@:buttons.logout',
-      cancel: '@:buttons.cancel'
+      logout: '@:buttons.logout.label',
+      cancel: '@:buttons.cancel.label'
     },
     password: {
       forgot: {
@@ -223,12 +285,6 @@ export default {
       }
     }
   },
-
-  pages: {
-    landing: {
-
-    }
-  },
   // Permission
   // permission: {
   //   role: {
@@ -267,10 +323,10 @@ export default {
     buttons: {
       add_top_menu: 'Меню верхнего уровня',
       add_sub_menu: 'Добавить подменю',
-      save: '@:buttons.save',
-      delete: '@:buttons.delete',
-      cancel: '@:buttons.cancel',
-      select: '@:buttons.select'
+      save: '@:buttons.save.label',
+      delete: '@:buttons.delete.label',
+      cancel: '@:buttons.cancel.label',
+      select: '@:buttons.select.label'
     },
     dialog: {
       confirm: {
@@ -282,20 +338,7 @@ export default {
     },
     errors: {
       title_required: 'Заполните это поле'
-    },
-    cms: 'CMS',
-    system_settings: 'Настрока системы',
-    website_module_administrator: 'Administrador do Website'
-    // "Department management": "Cadastro de departamentos",
-    // "Business component": "Componente de negócio",
-    // "Official component": "Componente oficial",
-    // "Organization": "Organização",
-    // "Button": "Botão",
-    // "Buttons": "Botões",
-    // "Button-Group": "Grupo de botões",
-    // "Dropdown Button": "Botão Dropdown",
-    // "Navigation": "Navegação",
-    // "Toolbar": "Barra de ferramentas",
+    }
   },
   roles: {
     role: {
@@ -304,4 +347,85 @@ export default {
       id: 'Ид'
     }
   },
+  // Pages
+  pages: {
+    dictionary: {
+      title: 'Настроечные таблицы',
+      measure: {
+        title: 'Единицы Измерения',
+        help: 'ОКЕИ — Общероссийский классификатор единиц измерения',
+        mode: {
+          add: {
+            title: 'Добавление'
+          },
+          edit: {
+            title: 'Редактирование'
+          }
+        },
+        field: {
+          code: {
+            label: 'Код Ед. Измерения',
+            hint: 'Введите условное обозначение еденицы измерения (например: шт, кг).'
+          },
+          okei_code: {
+            label: 'Код ОКЕИ',
+            hint: 'Введите международный код еденицы измерения.'
+          },
+          description: {
+            label: 'Описание',
+            hint: 'Введите описание еденицы измерения'
+          }
+        },
+        buttons: {
+          refresh: {
+            label: '@:buttons.refresh.label',
+            tooltip: '@:buttons.refresh.tooltip'
+          }
+        },
+        dialogues: {
+          reset: {
+            title: 'Подтвердите',
+            message: 'Вы уверены, что хотите очистить форму?',
+            buttons: {
+              ok: '@:buttons.ok.label',
+              cancel: '@:buttons.cancel.label'
+            }
+          },
+          postsave: {
+            title: 'Успешное сохранение',
+            message: 'Вы хотите ввести еще одну еденицу измерения ? ' +
+              'Нажмите <strong>Далее</strong>, если Да, или <strong>В начало</strong> если хотите вернуться ' +
+              'в режим просмотра справочника.',
+            buttons: {
+              ok: 'В начало',
+              cancel: 'Далее'
+            }
+          },
+          beforeleave: {
+            title: '',
+            message: 'Вы действительно хотите уйти с этой страницы? Данные не будут сохранены.'
+          },
+          confirm_delete: {
+            title: 'Подтвердите',
+            message: 'Вы уверены, что хотите удалить отмеченные записи?',
+            buttons: {
+              ok: '@:buttons.ok.label',
+              cancel: '@:buttons.cancel.label'
+            }
+          }
+        },
+        add: {
+          title: 'Единицы Измерения',
+          help: {
+            title: 'Помощь',
+            message: '<p>Добавьте в Общероссийский классификатор единиц измерения ' +
+              'соответствующие данные, используемые вами в вашей сфере деятельности. .</p>'
+          },
+          notify: {
+            loading: 'Сохранение еденицы измерения...'
+          }
+        }
+      }
+    }
+  }
 }

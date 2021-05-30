@@ -28,18 +28,23 @@
     "dev:local": "cross-env QENV=local quasar dev"
   },
   "dependencies": {
-    "@quasar/extras": "^1.10.0",
+    "@quasar/extras": "^1.10.4",
     "axios": "^0.21.1",
     "chokidar": "^3.5.0",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
+    "docx": "^5.4.0",
+    "docxtemplater": "^3.19.7",
+    "pizzip": "^3.0.6",
+    "file-saver": "^2.0.2",
+    "slugify": "^1.4.6",
     "quasar": "^1.15.10",
     "rollbar": "^2.19.4",
     "vue-i18n": "^8.24.3",
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {
-    "@quasar/app": "^2.2.3",
+    "@quasar/app": "^2.2.6",
     "@quasar/quasar-app-extension-qenv": "^1.1.0",
     "babel-eslint": "^10.0.1",
     "cheerio": "^1.0.0-rc.2",

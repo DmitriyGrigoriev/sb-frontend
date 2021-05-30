@@ -10,10 +10,11 @@ module.exports = function (ctx) {
     boot: [
       'i18n',
       'test',
+      'bus',
       'vuelidate',
-      'permission',
+      // 'permission',
       'router-auth',
-      'error-handler',
+      // 'error-handler',
       'loading-defaults'
     ],
 
@@ -109,6 +110,7 @@ module.exports = function (ctx) {
       plugins: [
         'Notify',
         'Dialog',
+        'Loading',
         'LocalStorage',
         'AppFullscreen',
         'Dark',

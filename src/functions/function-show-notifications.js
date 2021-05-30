@@ -1,33 +1,29 @@
 import { Notify } from 'quasar'
+import { translate } from '@/utils/translate'
 
-export const showSuccessNotification = ({
-  message = 'Success',
-  icon = 'check',
-  actions = null
-}) => {
+// Attempt to define `$t` in this context
+const $t = translate
+
+export function showSuccessNotification (message, icon) {
   Notify.create({
-    icon: icon,
+    icon: icon == null ? 'check' : icon,
     position: 'bottom-right',
     color: 'primary',
-    message: message,
+    message: message == null ? $t('messages.event.save') : message,
     timeout: 5000,
     progress: true,
-    actions: actions
+    actions: null
   })
 }
 
-export const showErrorNotification = ({
-  message = 'An error occurred.',
-  icon = 'close',
-  actions = null
-}) => {
+export function showErrorNotification (message, icon) {
   Notify.create({
-    icon: icon,
+    icon: icon == null ? 'close' : icon,
     position: 'bottom-right',
     color: 'negative',
-    message: message,
+    message: message == null ? $t('messages.event.error') : message,
     timeout: 5000,
     progress: true,
-    actions: actions
+    actions: null
   })
 }

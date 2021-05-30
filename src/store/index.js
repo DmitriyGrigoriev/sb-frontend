@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
-import auth from '../modules/auth/store'
-import users from '../modules/users/store'
+// store/modules
 import settings from './modules/settings'
+import components from './modules/components'
+
+import auth from '@/modules/auth/store'
+import users from '@/modules/users/store'
+import measure from '@/modules/unitofmeasure/store'
 
 Vue.use(Vuex)
 
@@ -16,7 +19,9 @@ const Store = new Vuex.Store({
   modules: {
     auth,
     users,
-    settings
+    settings,
+    components,
+    measure
   },
   // enable strict mode (adds overhead!)
   // for dev mode only
