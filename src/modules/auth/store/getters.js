@@ -26,6 +26,20 @@ export function error (state) {
   return state.error
 }
 
+export function isAa (state) {
+  // if (state.user && state.user.operating_unit && state.user.operating_unit.operating_unit_type) {
+  //   return state.user.operating_unit.operating_unit_type.name === 'attached-agency'
+  // }
+  return false
+}
+
+export function isAc (state) {
+  // if (state.user && state.user.operating_unit && state.user.operating_unit.operating_unit_type) {
+  //   return state.user.operating_unit.operating_unit_type.name === 'attached-corporation'
+  // }
+  return false
+}
+
 export function user (state) {
   return state.user
 }
@@ -37,7 +51,7 @@ export function isReviewer (state) {
   return false
 }
 
-export function isSuperadmin (state) {
+export function isSuperuser (state) {
   if (state.user) {
     return state.user.role ? state.user.role.some(role => role.name === 'superuser') : false
   }
