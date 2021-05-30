@@ -69,7 +69,23 @@ export default {
   },
   data () {
     return {
-      activities: [],
+      activities: {
+        id: '1',
+        description: '',
+        properties: '',
+        subject: {
+          id: '1',
+          name: 'subject-name',
+          title: 'subject-title'
+        },
+        causer: {
+          id: '1',
+          name: 'cuser-name'
+        },
+        created_at: null,
+        updated_at: null
+      },
+      // activities: [],
       loading: false
     }
   },
