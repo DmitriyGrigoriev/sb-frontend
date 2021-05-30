@@ -1,4 +1,3 @@
-// import { LocalStorage } from 'quasar'
 import { storageService } from '@/services/storage.service'
 
 export default function () {
