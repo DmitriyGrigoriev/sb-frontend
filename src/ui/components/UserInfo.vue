@@ -6,7 +6,7 @@
   >
     <div class="absolute-bottom bg-transparent text-center text-black">
       <q-avatar size="56px" class="q-mb-sm">
-        <img alt="user_avatar" :src="user ? user.avatar : ''" />
+        <img :src="avatar ? avatar : ''"/>
       </q-avatar>
       <div class="text-weight-bold text-uppercase">
         {{ user ? user.full_name : '' }}
@@ -16,9 +16,9 @@
         {{ user && user.position ? user.position : '' }}
       </div>
       <div>
-        <q-badge>
-          {{ user && user.role ? user.role.name : 'No role.' }}
-        </q-badge>
+<!--        <q-badge>-->
+<!--          {{ user && user.role ? user.role.name : 'No role.' }}-->
+<!--        </q-badge>-->
       </div>
     </div>
   </q-img>
@@ -31,7 +31,7 @@ export default {
   name: 'UserInfo',
   computed: {
     ...mapState('settings', ['dark']),
-    ...mapGetters('auth', ['user'])
+    ...mapGetters('auth', ['user', 'avatar'])
   },
   methods: {
     // refetch() {
