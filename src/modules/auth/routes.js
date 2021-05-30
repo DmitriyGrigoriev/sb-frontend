@@ -1,6 +1,6 @@
 const AuthRoutes = {
   path: '',
-  component: () => import('./layouts/AuthLayout.vue'),
+  component: () => import('@/ui/layouts/AuthLayout.vue'),
   children: [
     {
       path: 'login',
