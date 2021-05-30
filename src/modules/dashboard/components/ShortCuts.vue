@@ -31,16 +31,25 @@ export default {
   name: 'ShortCuts',
   computed: {
     ...mapGetters('auth', ['role', 'isEncoder']),
-    filteredLinks () {
+    filteredLinks: function () {
       let filteredLinks = []
       const role = this.role
+      let name = ''
 
       if (role) {
         filteredLinks = this.links.filter(link => {
           if (link.hasAccess.length === 0) {
             return true
           }
-          return link.hasAccess.includes(role)
+          name = ''
+          Object.keys(role).forEach(key => {
+            if (link.hasAccess.includes(role[key].name)) {
+              if (name === '') {
+                name = role[key].name
+              }
+            }
+          })
+          return link.hasAccess.includes(name)
         })
       } else {
         filteredLinks = []
@@ -120,6 +129,27 @@ export default {
           label: 'Settings',
           icon: 'settings',
           url: '/settings',
+          color: 'pink',
+          hasAccess: []
+        },
+        {
+          label: this.$t('pages.dictionary.title'),
+          icon: 'ac_unit',
+          url: '/dictionary/measure',
+          color: 'pink',
+          hasAccess: []
+        },
+        {
+          label: 'Тест',
+          icon: 'ac_unit',
+          url: '/dictionary/test-input',
+          color: 'pink',
+          hasAccess: []
+        },
+        {
+          label: 'Тест таблицы',
+          icon: 'ac_unit',
+          url: '/dictionary/test-table',
           color: 'pink',
           hasAccess: []
         }
