@@ -22,12 +22,24 @@ handleError.message = function (error, showErrorMessage) {
     store.dispatch('auth/signoutUser')
   }
   if (typeof error.response !== 'undefined') {
-    // Setup Generic Response Messages
+    /* Processing: authorization response error 401
+       - check expired token or not
+    */
     if (error.response.status === 401) {
-      message = $t('auth.login.invalid_credentials')
-      setTimeout(() => {
-        Router.push({ name: 'login' })
-      }, 1000)
+      if (Object.prototype.hasOwnProperty.call(error.response.data, 'code')) {
+        if (error.response.data.code === 'token_not_valid') {
+          store.dispatch('auth/signoutUser')
+          setTimeout(() => {
+            Router.push({ name: 'home' })
+          }, 1000)
+        }
+      } else {
+        /* invalid credentials: login, password or unactivated email */
+        message = $t('auth.login.invalid_credentials')
+        setTimeout(() => {
+          Router.push({ name: 'login' })
+        }, 1000)
+      }
     } else if (error.response.status === 403) {
       if (Object.prototype.hasOwnProperty.call(error.response.data, 'detail')) {
         message = error.response.data.detail
@@ -53,7 +65,7 @@ handleError.message = function (error, showErrorMessage) {
       }
     }
   }
-  if (showErrorMessage != null) {
+  if (showErrorMessage) {
     showErrorNotification({ message: message })
   }
   return message
