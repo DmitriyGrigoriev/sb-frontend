@@ -7,6 +7,6 @@
 <script>
 export default {
   name: 'DownloadButton',
-	props: ['tooltip']
-};
+  props: ['tooltip']
+}
 </script>

@@ -7,11 +7,11 @@
 <script>
 export default {
   name: 'RefreshButton',
-	props: {
-  	tooltip: {
-  		type: String,
-			default: 'Refresh'
-		}
-	}
-};
+  props: {
+    tooltip: {
+      type: String,
+      default: 'Refresh'
+    }
+  }
+}
 </script>

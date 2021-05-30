@@ -1,11 +1,10 @@
 <template id="submit-button">
   <q-btn
    :label="label"
-    name="submit-button"
-    color="primary"
-    outline
+   type="submit"
+   name="submit-button"
+   color="primary"
   />
-<!--  @click="listeners['click']"-->
 </template>
 <script>
 export default {
