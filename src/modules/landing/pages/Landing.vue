@@ -44,7 +44,7 @@
                 href="https://ipms-docs.web.app/"
                 target="_blank"
               >
-                {{ $t('buttons.learnMore') }}
+                {{ $t('buttons.learn_more.label') }}
               </q-btn>
             </div>
           </div>
@@ -79,7 +79,7 @@
                   href="https://ipms-docs.web.app/"
                   target="_blank"
                 >
-                  {{ $t('buttons.learnMore') }}
+                  {{ $t('buttons.learn_more.label') }}
                 </q-btn>
               </div>
             </div>
@@ -115,7 +115,7 @@
                   :href="DOCS_LINKS.installation"
                   target="_blank"
                 >
-                  {{ $t('buttons.learnMore') }}
+                  {{ $t('buttons.learn_more.label') }}
                 </q-btn>
               </div>
             </div>
