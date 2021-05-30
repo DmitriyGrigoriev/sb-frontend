@@ -1,20 +1,40 @@
 <template>
   <div class="col">
-    <span class="text-caption text-weight-bold">{{ label }}</span>
+    <div class="row text-caption text-weight-bold items-center justify-between">
+      {{ label }}
+    </div>
     <q-input
+      square
+      outlined
+      clearable
+      hide-bottom-space
+      label-color="orange-10"
       v-model="model"
       :type="type"
-      :dense="dense"
-      outlined
+      :dense="$q.screen.lt.md"
       :readonly="readonly"
       :rules="rules"
       :max-length="maxlength"
       :hint="hint"
-      clearable
-      label-color="orange-10"
-      hide-bottom-space
-    />
+      :mask="mask"
+      :fill-mask="fillMask"
+      :placeholder="placeholder"
+      :error="error"
+      :error-message="errorMessage"
+    >
+      <!-- Property errorMessage === error-message it's flow from camelCase rule -->
+      <template v-slot:append>
+        <q-btn
+          v-if="withNa"
+          flat
+          label="N/A"
+          @click="model = 'N/A'"
+          color="red"
+        ></q-btn>
+      </template>
+    </q-input>
   </div>
+
 </template>
 
 <script>
@@ -22,7 +42,24 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'TextInput',
-  props: ['type', 'label', 'value', 'readonly', 'rules', 'maxlength', 'hint'],
+  props: {
+    type: String,
+    label: String,
+    value: [String, Number],
+    readonly: Boolean,
+    rules: Array,
+    maxlength: Number,
+    hint: String,
+    mask: String,
+    fillMask: String,
+    placeholder: String,
+    error: Boolean,
+    errorMessage: String,
+    withNa: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     ...mapState('settings', ['dense']),
     model: {
@@ -31,6 +68,15 @@ export default {
       },
       set (val) {
         this.$emit('input', val)
+      }
+    },
+    na: {
+      get () {
+        if (this.model && this.model.toLowerCase() === 'N/A') {
+          return true
+        } else {
+          return false
+        }
       }
     }
   }
