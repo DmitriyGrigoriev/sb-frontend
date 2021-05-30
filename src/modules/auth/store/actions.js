@@ -32,7 +32,7 @@ export function register ({ commit }, payload) {
     .finally(() => Loading.hide())
 }
 
-export function signinUser ({ commit }, payload) {
+export function signinUser ({ commit, dispatch }, payload) {
   // clear token so it does not get sent to server
   commit('CLEAR_TOKEN')
   commit('CLEAR_ERROR')
@@ -45,6 +45,7 @@ export function signinUser ({ commit }, payload) {
       commit('SET_TOKEN', handleResponse(response).access)
       commit('SET_REFRESH_TOKEN', handleResponse(response).refresh)
       commit('SET_LOADING', false)
+      dispatch('getCurrentUser')
       this.$router.replace({ name: 'dashboard' })
       // reset the store
       // client.resetStore()
