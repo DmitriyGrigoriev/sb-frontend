@@ -27,51 +27,51 @@
 
 export default {
   name: 'EmailVerify',
-  data() {
+  data () {
     return {
       loading: true,
       success: false
-    };
+    }
   },
-  created() {
-    this.loading = true;
+  created () {
+    this.loading = true
 
-    const TOKEN = this.$route.query.token ? this.$route.query.token : null;
+    const TOKEN = this.$route.query.token ? this.$route.query.token : null
 
     if (!TOKEN) {
-      this.loading = false;
-      this.success = false;
-      alert('Unable to retrieve token. Please check the email again.');
+      this.loading = false
+      this.success = false
+      alert('Unable to retrieve token. Please check the email again.')
     } else {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation verifyEmail($token: String!) {
-              verifyEmail(input: { token: $token }) {
-                access_token
-                refresh_token
-                user {
-                  id
-                  name
-                  email
-                }
-              }
-            }
-          `,
-          variables: {
-            token: TOKEN
-          }
-        })
-        .then(({ data }) => {
-          if (data.verifyEmail) {
-            this.success = true;
-          }
-        })
-        .catch(err => console.error(err))
-        .finally(() => {
-          this.loading = false;
-        });
+      // this.$apollo
+      //   .mutate({
+      //     mutation: gql`
+      //       mutation verifyEmail($token: String!) {
+      //         verifyEmail(input: { token: $token }) {
+      //           access_token
+      //           refresh_token
+      //           user {
+      //             id
+      //             name
+      //             email
+      //           }
+      //         }
+      //       }
+      //     `,
+      //     variables: {
+      //       token: TOKEN
+      //     }
+      //   })
+      //   .then(({ data }) => {
+      //     if (data.verifyEmail) {
+      //       this.success = true
+      //     }
+      //   })
+      //   .catch(err => console.error(err))
+      //   .finally(() => {
+      //     this.loading = false
+      //   })
     }
   }
-};
+}
 </script>
