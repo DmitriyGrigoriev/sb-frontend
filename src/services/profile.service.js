@@ -14,7 +14,7 @@ export const profileService = {
   async getCurrentUser () {
     await apiService.mount401Interceptor()
     await apiService.setHeader()
-    return apiService.customRequest(CURRENT_USER);
+    return apiService.customRequest(CURRENT_USER)
     // return response
     // return client
     //   .query({
