@@ -1,6 +1,6 @@
 const LandingRoute = {
   path: '/',
-  component: () => import('./layouts/LandingLayout.vue'),
+  component: () => import('@/ui/layouts/LandingLayout.vue'),
   children: [
     {
       path: '',
