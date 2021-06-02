@@ -1,7 +1,7 @@
 <template>
   <page-container>
     <template v-slot:title>
-      <page-title title="Profile" icon="fas fa-id-card"></page-title>
+      <page-title :title="$t('menus.profile.label')" icon="fas fa-id-card"></page-title>
     </template>
 
     <update-profile></update-profile>
