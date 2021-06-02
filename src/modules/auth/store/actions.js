@@ -46,7 +46,8 @@ export function signinUser ({ commit, dispatch }, payload) {
       commit('SET_REFRESH_TOKEN', handleResponse(response).refresh)
       commit('SET_LOADING', false)
       dispatch('getCurrentUser')
-      this.$router.replace({ name: 'dashboard' })
+      // this.$router.push({ path: '/dashboard' })
+      // this.$router.replace({ name: 'dashboard' })
       // reset the store
       // client.resetStore()
     })
