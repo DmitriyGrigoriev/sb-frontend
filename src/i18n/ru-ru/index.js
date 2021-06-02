@@ -304,49 +304,54 @@ export default {
   //   },
   // },
   // Menus.vue
+  components: {
+    shortcuts: {
+      label: 'Ярлыки'
+    },
+    announcements: {
+      label: 'Анонсы',
+      message: 'Анонсов пока нет.'
+    },
+    releases: {
+      label: 'Релизы',
+      message: 'Релизов пока нет.'
+    },
+    useful_links: {
+      label: 'Полезные ссылки',
+      message: 'Полезных ссылок пока нет.'
+    }
+  },
   menus: {
-    labels: {
-      edit: 'Выбран',
-      edit_menu: 'Изменение пункта меню',
-      not_selected: 'Пунк меню не выбран',
-      add_top_menu: 'Добавление меню верхнего уровня',
-      add_sub_menu: 'Добавление подменю',
-      authority_code: 'Код авторизации',
-      display_left: 'Меню слева',
-      lock_menu: 'Заблокировать',
-      select_icon: 'Выбор иконки',
-      path: 'Путь в формате URL',
-      name: 'Уникальное имя',
-      title: '@:labels.title',
-      sort: '@:labels.sort'
+    dashboard: {
+      label: 'Панель управления'
     },
-    buttons: {
-      add_top_menu: 'Меню верхнего уровня',
-      add_sub_menu: 'Добавить подменю',
-      save: '@:buttons.save.label',
-      delete: '@:buttons.delete.label',
-      cancel: '@:buttons.cancel.label',
-      select: '@:buttons.select.label'
+    profile: {
+      label: 'Профиль'
     },
-    dialog: {
-      confirm: {
-        delete: {
-          title: 'Подтверждение',
-          message: 'Вы уверены, что хотите удалить это пункт меню?'
-        }
-      }
+    admin: {
+      label: 'Администрирование'
     },
-    errors: {
-      title_required: 'Заполните это поле'
+    security: {
+      label: 'Безопасность'
+    },
+    settings: {
+      label: 'Настройки'
+    },
+    askhelp: {
+      label: '#Помощь',
+      url: 'https://smart-billing.slack.com'
+    },
+    logout: {
+      label: 'Выход'
     }
   },
-  roles: {
-    role: {
-      name: 'Имя роли',
-      code: 'Код роли',
-      id: 'Ид'
-    }
-  },
+  // roles: {
+  //   role: {
+  //     name: 'Имя роли',
+  //     code: 'Код роли',
+  //     id: 'Ид'
+  //   }
+  // },
   // Pages
   pages: {
     dictionary: {

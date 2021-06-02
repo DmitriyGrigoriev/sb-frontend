@@ -1,27 +1,27 @@
 <template id="menu">
   <q-list dense>
-    <menu-item label="Dashboard" to="/dashboard" icon="fas fa-tachometer-alt" />
-    <menu-item label="Programs" to="/programs" icon="fas fa-list" v-if="!isReviewer" />
-    <menu-item label="Projects" to="/projects" icon="fas fa-tasks" v-if="!isReviewer" />
-    <menu-item label="Review Programs" to="/review" icon="fas fa-list" v-if="isReviewer" />
-    <menu-item label="Review Projects" to="/projects" icon="fas fa-tasks" v-if="isReviewer" />
-    <menu-item label="Consolidators" to="/consolidates" icon="fas fa-layer-group" />
-    <menu-item label="Deleted Projects" to="/projects/trash" icon="fas fa-trash-alt" />
+    <menu-item :label="$t('menus.dashboard.label')" @click="selectElement({ name: 'dashboard' })" icon="fas fa-tachometer-alt" />
+    <menu-item label="Programs" @click="selectElement({ name: 'programs' })" icon="fas fa-list" v-if="!isReviewer" />
+    <menu-item label="Projects" @click="selectElement({ name: 'projects' })" icon="fas fa-tasks" v-if="!isReviewer" />
+    <menu-item label="Review Programs" @click="selectElement({ name: 'review' })" icon="fas fa-list" v-if="isReviewer" />
+    <menu-item label="Review Projects" @click="selectElement({name: 'projects' })" icon="fas fa-tasks" v-if="isReviewer" />
+    <menu-item label="Consolidators" @click="selectElement({ name: 'consolidates' })" icon="fas fa-layer-group" />
+    <menu-item label="Deleted Projects" @click="selectElement({ name: 'deleted-projects' })" icon="fas fa-trash-alt" />
     <q-separator />
-    <menu-item label="Profile" to="/profile" icon="fas fa-id-card" />
-    <menu-item label="Admin" to="/admin" icon="fas fa-user-shield" />
-    <menu-item label="Security" to="/security" icon="fas fa-fingerprint" />
-    <menu-item label="Settings" to="/settings" icon="fas fa-cog" />
+    <menu-item :label="$t('menus.profile.label')" @click="selectElement({ name: 'profile' })" icon="fas fa-id-card" />
+    <menu-item :label="$t('menus.admin.label')" @click="selectElement({ name: 'admin' })" icon="fas fa-user-shield" />
+    <menu-item :label="$t('menus.security.label')" @click="selectElement({ name: 'security' })" icon="fas fa-fingerprint" />
+    <menu-item :label="$t('menus.settings.label')" @click="selectElement({ name: 'settings' })" icon="fas fa-cog" />
     <q-separator />
     <menu-item
-      label="#AskHelp"
+      :label="$t('menus.askhelp.label')"
       icon="fab fa-slack"
-      @click="openURL('https://ipmsglobal.slack.com')"
+      @click="openURL($t('menus.askhelp.url'))"
       type="a"
       target="_blank"
     />
     <q-separator></q-separator>
-    <menu-item label="Logout" icon="exit_to_app" @click="handleSignoutUser"></menu-item>
+    <menu-item :label="$t('menus.logout.label')" icon="exit_to_app" @click="handleSignoutUser"></menu-item>
   </q-list>
 </template>
 
@@ -38,6 +38,9 @@ export default {
     }
   },
   methods: {
+    selectElement (name) {
+      this.$router.push(name)
+    },
     handleSignoutUser () {
       this.$q
         .dialog({
