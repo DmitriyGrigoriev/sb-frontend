@@ -1,6 +1,7 @@
 import ProjectsRoutes from './projects'
 import DictionaryRoutes from './dictionary'
 import TestRoutes from './test'
+// import DashboardRoutes from './dashboard'
 
 const routes = [
   {
@@ -102,19 +103,8 @@ const routes = [
           requiresAuth: true
         }
       },
-      // {
-      //   path: 'dictionary/measure',
-      //   name: 'measure',
-      //   component: () =>
-      //     import(
-      //       /* webpackChunkName: 'SecurityPage' */ '@/modules/unitofmeasure/pages/MeasureIndex.vue'
-      //     ),
-      //   meta: {
-      //     requiresAuth: true
-      //   }
-      // },
       {
-        path: 'programs',
+        path: '/programs',
         name: 'programs',
         component: () =>
           import(
@@ -163,6 +153,7 @@ const routes = [
       // }
     ]
   },
+  // DashboardRoutes,
   ProjectsRoutes,
   DictionaryRoutes,
   TestRoutes,
