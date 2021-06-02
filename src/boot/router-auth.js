@@ -19,11 +19,12 @@ export default ({ router, store }) => {
     const isReviewer = store.getters['auth/isReviewer']
     // const role = user ? (user.role ? user.role.name : 'guest') : 'guest'
     // console.log(`user: ${user} role: ${role}, token: ${!!token}`)
+    // path: '/login',
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
       if (!token) {
         next({
-          path: '/login',
+          name: 'login',
           params: { nextUrl: to.fullPath }
         })
       } else {
@@ -37,9 +38,8 @@ export default ({ router, store }) => {
                 'The page you are trying to access is restricted to administrators only',
               cancel: true
             })
-            // next({ name: 'home' });
-            // redirect to origin page
             next({ name: 'dashboard' })
+            // redirect to origin page
           }
         } else if (to.matched.some(record => record.meta.isEncoder)) {
           if (isEncoder) {
@@ -73,6 +73,9 @@ export default ({ router, store }) => {
           return next()
         }
       }
+    } else if (to.matched.some(record => record.meta.guest && token)) {
+      // if the route does not require auth
+      return next('/')
     } else {
       // if the route does not require auth
       return next()
