@@ -1,7 +1,7 @@
 <template>
   <page-container>
     <template v-slot:title>
-      <page-title title="Dashboard" icon="fas fa-tachometer-alt"></page-title>
+      <page-title :title="$t('menus.dashboard.label')" icon="fas fa-tachometer-alt"></page-title>
     </template>
 
     <q-banner class="bg-red-1" v-if="env === 'STAGING'">
@@ -44,12 +44,12 @@ import AnnouncementComponent from '../components/AnnouncementComponent'
 export default {
   name: 'PageIndex',
   components: {
+    ShortCuts,
     AnnouncementComponent,
     UsefulLinks,
     ReleasesComponent,
     PageContainer,
-    PageTitle,
-    ShortCuts
+    PageTitle
   },
   computed: {
     ...mapState('auth', ['user']),

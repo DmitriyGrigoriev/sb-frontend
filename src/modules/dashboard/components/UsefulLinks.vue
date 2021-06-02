@@ -1,7 +1,8 @@
 <template>
   <div class="column">
     <q-item-label header class="q-px-none">
-      Useful Links <mini-refresh @click="refetch"/>
+      {{ $t('components.useful_links.label') }}
+      <mini-refresh @click="refetch"/>
     </q-item-label>
     <q-card flat bordered square>
       <q-card-section>
@@ -38,7 +39,7 @@
                 <q-icon name="priority_high" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>No useful links yet.</q-item-label>
+                <q-item-label>{{ $t('components.useful_links.message') }}</q-item-label>
               </q-item-section>
             </q-item>
           </template>

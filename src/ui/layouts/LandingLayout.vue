@@ -30,7 +30,7 @@
               flat
               :label="$t('buttons.goto_app.label')"
               stretch
-              to="/dashboard"
+              :to="{ name: 'dashboard' }"
               v-if="isLoggedIn"
             ></q-btn>
 

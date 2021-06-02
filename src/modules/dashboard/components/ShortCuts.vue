@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="row">
-      <q-item-label header class="q-px-none">Shortcuts</q-item-label>
+      <q-item-label header class="q-px-none">{{ $t('components.shortcuts.label') }}</q-item-label>
     </div>
 
     <div class="row">
       <template v-for="(link, index) in filteredLinks">
         <div class="col-6" :key="index">
           <q-card flat square class="fit" bordered>
-            <q-item clickable :to="link.url" v-ripple>
+            <q-item clickable @click="selectElement(link.name)" v-ripple>
               <q-item-section>
                 <q-item-label class="text-uppercase"
                   >{{ link.label }} {{ link.visible }}</q-item-label
@@ -57,21 +57,47 @@ export default {
       return filteredLinks
     }
   },
+  methods: {
+    selectElement (name) {
+      this.$router.push(name)
+    }
+  },
   data () {
     return {
       links: [
         {
+          label: 'Projects',
+          icon: 'list',
+          name: { name: 'projects' },
+          color: 'blue',
+          hasAccess: ['encoder']
+        },
+        {
           label: 'Add Project',
           icon: 'playlist_add',
-          url: '/projects/add',
+          name: { name: 'add-project' },
           color: 'secondary',
           hasAccess: ['encoder'],
           encoder: true
         },
         {
+          label: 'Review Projects',
+          icon: 'list',
+          name: { name: 'projects' },
+          color: 'blue',
+          hasAccess: ['reviewer']
+        },
+        {
+          label: 'Deleted Projects',
+          icon: 'delete',
+          name: { name: 'deleted-projects' },
+          color: 'red',
+          hasAccess: ['encoder']
+        },
+        {
           label: 'Programs',
           icon: 'view_module',
-          url: '/programs',
+          name: { name: 'programs' },
           color: 'secondary',
           hasAccess: ['encoder'],
           encoder: true
@@ -79,77 +105,56 @@ export default {
         {
           label: 'Review Programs',
           icon: 'rate_review',
-          url: '/review',
+          name: { name: 'review' },
           color: 'secondary',
           reviewer: true,
           hasAccess: ['reviewer']
         },
         {
-          label: 'Projects',
-          icon: 'list',
-          url: '/projects',
-          color: 'blue',
-          hasAccess: ['encoder']
-        },
-        {
           label: 'Consolidators',
           icon: 'pageview',
-          url: '/consolidates',
+          name: { name: 'consolidates' },
           hasAccess: ['encoder']
         },
         {
-          label: 'Review Projects',
-          icon: 'list',
-          url: '/projects',
-          color: 'blue',
-          hasAccess: ['reviewer']
-        },
-        {
-          label: 'Deleted Projects',
-          icon: 'delete',
-          url: '/projects/trash',
-          color: 'red',
-          hasAccess: ['encoder']
-        },
-        {
-          label: 'Profile',
+          label: this.$t('menus.profile.label'),
           icon: 'tune',
-          url: '/profile',
+          name: { name: 'profile' },
           color: 'primary',
           hasAccess: []
         },
         {
-          label: 'Security',
+          label: this.$t('menus.security.label'),
           icon: 'vpn_key',
-          url: '/security',
+          name: { name: 'security' },
           color: 'red',
           hasAccess: []
         },
         {
-          label: 'Settings',
+          label: this.$t('menus.settings.label'),
           icon: 'settings',
-          url: '/settings',
+          name: { name: 'settings' },
           color: 'pink',
           hasAccess: []
         },
         {
           label: this.$t('pages.dictionary.title'),
           icon: 'ac_unit',
-          url: '/dictionary/measure',
+          name: { name: 'measure' },
           color: 'pink',
           hasAccess: []
         },
         {
           label: 'Тест',
           icon: 'ac_unit',
-          url: '/dictionary/test-input',
+          name: { name: 'test-input' },
           color: 'pink',
           hasAccess: []
         },
         {
           label: 'Тест таблицы',
           icon: 'ac_unit',
-          url: '/dictionary/test-table',
+          name: { name: 'test-table' },
           color: 'pink',
           hasAccess: []
         }
