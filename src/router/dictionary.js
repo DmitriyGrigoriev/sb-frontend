@@ -7,7 +7,7 @@ const DictionaryRoutes = {
       name: 'measure',
       component: () =>
         import(
-          /* webpackChunkName: 'MeasurePag' */ '@/modules/unitofmeasure/pages/Index.vue'
+          /* webpackChunkName: 'MeasurePage' */ '@/modules/unitofmeasure/pages/MeasureIndex.vue'
         ),
       meta: {
         requiresAuth: true
@@ -31,6 +31,17 @@ const DictionaryRoutes = {
       component: () =>
         import(
           /* webpackChunkName: 'EditMeasurePage' */ '@/modules/unitofmeasure/pages/MeasureEdit.vue'
+        ),
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: 'vat',
+      name: 'vat',
+      component: () =>
+        import(
+          /* webpackChunkName: 'MeasurePage' */ '@/modules/unitofmeasure/pages/VatIndex.vue'
         ),
       meta: {
         requiresAuth: true
