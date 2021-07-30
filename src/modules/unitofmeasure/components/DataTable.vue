@@ -1,41 +1,67 @@
 <template id="data-table">
+<!--https://stackoverflow.com/questions/59170520/prop-being-mutated-vuejs  -->
+<!--https://quasar.dev/vue-components/table-->
+<!--row-key="id" There's important for selected.sync -->
   <q-table
-    :data="table_data"
+    :data="data"
     :columns="columns"
     :loading="loading"
-    :filter="filter"
     :title="title"
-    :pagination.sync="pagination"
-    row-key="name"
-    @request="$emit('request')"
-    @row-click="$emit('row-clicked')"
+    row-key="id"
     wrap-cells
     separator="cell"
-    selection="multiple"
-    :selected.sync="selected_prop"
+    :selection="selection"
+    :selected.sync="selectedRows"
+    :pagination.sync="paginationModel"
     :selected-rows-label="getSelectedString"
     :no-data-label="$t('table.props.no_data_available')"
     :rows-per-page-label="$t('table.props.rows_per_page')"
     :no-results-label="$t('table.props.no_filter_result')"
-    style="margin-bottom: 70px;"
+    @request="onPageChange"
+    @row-click="onRowClick"
   >
-    <template v-slot:header-cell="props">
-      <q-th :props="props">
-        <strong>{{ props.col.label }}</strong>
-      </q-th>
+    <template v-slot:header="props">
+      <q-tr :props="props">
+        <q-th v-if="selection=='multiple'" auto-width>
+          <q-checkbox
+            color="secondary"
+            v-if="props.multipleSelect"
+            v-model="props.selected"
+          />
+        </q-th>
+        <q-th
+          v-for="col in props.cols"
+          :key="col.name"
+          :props="props"
+        >
+          <strong>{{ col.label }}</strong>
+        </q-th>
+      </q-tr>
     </template>
 
     <template v-slot:top-right="props">
-      <search v-model="filter"></search>
+      <search v-model="getFilter"></search>
 
-      <icon-button icon="add" :tooltip="$t('buttons.addrow.tooltip')" @click="$emit('add-row')" />
+      <icon-button icon="add" :tooltip="$t('buttons.addrow.tooltip')" @click="onAddClick" />
+<!--      <icon-button icon="add" :tooltip="$t('buttons.addrow.tooltip')" @click="$bus.$emit('add-row')" />-->
 
-<!--      <icon-button icon="delete" color="red" :disabled="mayDelete" :tooltip="$t('buttons.deleterow.tooltip')" @click="$emit('delete-row')" />-->
+      <icon-button icon="delete" color="red" :disabled="mayDelete" :tooltip="$t('buttons.deleterow.tooltip')" @click="deleteRows" />
 
-      <icon-button icon="refresh" :tooltip="$t('pages.dictionary.measure.buttons.refresh.tooltip')" @click="$emit('refetch')" />
+      <icon-button icon="refresh" :tooltip="$t('pages.dictionary.measure.buttons.refresh.tooltip')" @click="$bus.$emit('refetch')" />
 
       <fullscreen-button @click="props.toggleFullscreen" :in-fullscreen="props.inFullscreen"></fullscreen-button>
 
+    </template>
+
+    <!--https://forum.quasar-framework.org/topic/7677/qtable-with-custom-actions-passed-from-parent/3  -->
+    <template
+      v-for="(_, slot) of $scopedSlots"
+      v-slot:[slot]="scope"
+    >
+      <slot
+        :name="slot"
+        v-bind="scope"
+      />
     </template>
 
   </q-table>
@@ -43,68 +69,97 @@
 
 <script>
 /* eslint-disable camelcase */
-import { FullscreenButton, Search } from '@/ui'
-import IconButton from '@/ui/buttons/IconButton'
+import { FullscreenButton, Search, IconButton } from '@/ui'
+/* eslint no-dupe-keys: 0 */
 
 export default {
   name: 'DataTable',
-  props: {
-    title: String,
-    loading: Boolean,
-    selection: String,
-    filter: String,
-    data: Array,
-    selected: Array,
-    columns: Array
-  },
   components: {
+    FullscreenButton,
     IconButton,
-    Search,
-    FullscreenButton
+    Search
   },
-  watch: {
-    selected_prop: function () {
-      this.$emit('select', this.selected_prop)
-    }
-  },
-  data () {
-    return {
-      selection_prop: '',
-      selected_prop: [],
-      table_data: [],
-      serverPagination: {
-        page: 1,
-        rowsNumber: 0, // specifying this determines pagination is server-side
-        rowsPerPage: 5, // current rows per page being displayed
-        descending: true
+  computed: {
+    mayDelete () {
+      return this.selected.length === 0
+    },
+    getFilter: {
+      get: function () {
+        return this.filter
       },
-      pagination: {
-        page: 1,
-        rowsNumber: 0, // specifying this determines pagination is server-side
-        rowsPerPage: 5, // current rows per page being displayed
-        descending: true
+      set: function (val) {
+        // @request -> function(requestProp) see quasar documentation
+        this.$emit('request', { pagination: this.$props.pagination, filter: val })
+      }
+    },
+    selectedRows: {
+      get: function () {
+        return this.selected
+      },
+      set: function (val) {
+        this.$emit('update:selected', val)
+      }
+    },
+    paginationModel: {
+      get: function () {
+        return this.pagination
+      },
+      set: function (val) {
+        this.$emit('update:pagination', val)
       }
     }
   },
-  computed: {
-    // mayDelete () {
-    //   return this.selected.length === 0
-    // }
-  },
   methods: {
-    clearSelected () {
-      this.selected = []
+    onPageChange: function (val) {
+      this.$emit('request', { pagination: val.pagination, filter: val.filter })
+    },
+    onRowClick (evt, row) {
+      this.$emit('rowclick', evt, row)
+    },
+    onAddClick (evt, row) {
+      this.$emit('addrow')
+    },
+    deleteRows () {
+      this.$q
+        .dialog({
+          title: this.$t('pages.dictionary.measure.dialogues.confirm_delete.title'),
+          message: this.$t('pages.dictionary.measure.dialogues.confirm_delete.message'),
+          cancel: {
+            label: this.$t('pages.dictionary.measure.dialogues.confirm_delete.buttons.cancel')
+          },
+          ok: {
+            label: this.$t('pages.dictionary.measure.dialogues.confirm_delete.buttons.ok')
+          }
+        })
+        .onOk(() => {
+          this.$q.loading.show()
+          this.$emit('deleterows')
+          // this.$bus.$emit('delete-row')
+        })
     },
     getSelectedString () {
-      return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.serverData.length}`
+      return this.selected.length === 0 ? '' : `${this.selected.length} record${this.selected.length > 1 ? 's' : ''} selected of ${this.data.length}`
     }
   },
-  created () {
-    if (this.selected === undefined) {
-      this.selected_prop = []
-    } else {
-      this.selected_prop = this.selected
-    }
+  props: {
+    data: {
+      required: true,
+      default: () => []
+    },
+    columns: {
+      required: true,
+      default: () => []
+    },
+    selection: {
+      default: 'none'
+    },
+    pagination: {
+      required: true,
+      default: () => {}
+    },
+    title: String,
+    loading: Boolean,
+    selected: Array
   }
 }
 
