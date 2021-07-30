@@ -14,7 +14,7 @@
     </q-toolbar-title>
     <q-space />
 
-<!--    <header-search class="q-mr-md"></header-search>-->
+    <header-search class="q-mr-md"></header-search>
 
     <notification-button></notification-button>
 
@@ -31,15 +31,15 @@ import { mapGetters } from 'vuex'
 import DropdownMenu from '@/ui/components/Dropdown'
 import UserAvatar from '@/ui/components/UserAvatar'
 import NotificationButton from '@/ui/components/NotificationButton'
-// import HeaderSearch from '@/ui/components/HeaderSearch'
+import HeaderSearch from '@/ui/components/HeaderSearch'
 // import { GET_CURRENT_USER } from '@/graphql/queries';
 
 export default {
   components: {
     DropdownMenu,
     NotificationButton,
-    UserAvatar
-    // HeaderSearch
+    UserAvatar,
+    HeaderSearch
   },
   name: 'AppHeader',
   computed: {
