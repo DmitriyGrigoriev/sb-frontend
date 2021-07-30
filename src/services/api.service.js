@@ -55,11 +55,11 @@ const apiService = {
   // Response interceptor
   mount401Interceptor () {
     this._401interceptor = axios.interceptors.response.use(
-      (response) => {response
+      (response) => {
         return response
       },
       async (error) => {
-        if (error.request.status === 401) {
+        if (Object.prototype.hasOwnProperty.call(error, 'request') && error.request.status === 401) {
           if (error.config.url.includes(REFRESH_TOKEN.url)) {
             // Refresh token has failed. Logout the user
             await this.$store.dispatch('auth/signoutUser')
