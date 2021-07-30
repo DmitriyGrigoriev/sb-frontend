@@ -1,8 +1,8 @@
 import { apiService } from './api.service'
 import {
-  GET_MEASURE, MEASURE, GET_MEASURE_RECORD
+  GET_MEASURE, MEASURE, GET_MEASURE_RECORD, GET_VAT
 } from '@/queries'
-
+// «Unit of Measure» («Единица Измерения»)
 export const dictionaryService = {
   /**
    * fetchMeasure return Unit of Measure data.
@@ -28,5 +28,10 @@ export const dictionaryService = {
   async getMeasure (id) {
     const resource = GET_MEASURE_RECORD(id).url
     return apiService.get(resource)
+  },
+  // «VAT Posting Group» («НДС  Учетная Группа»)
+  async fetchVat (query) {
+    const resource = GET_VAT(query)
+    return apiService.customRequest(resource)
   }
 }
