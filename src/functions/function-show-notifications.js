@@ -6,7 +6,7 @@ const $t = translate
 
 export function showSuccessNotification (message, icon) {
   Notify.create({
-    icon: icon == null ? 'check' : icon,
+    icon: icon === 'undefined' ? 'check' : icon,
     position: 'bottom-right',
     color: 'primary',
     message: message == null ? $t('messages.event.save') : message,
@@ -18,7 +18,7 @@ export function showSuccessNotification (message, icon) {
 
 export function showErrorNotification (message, icon) {
   Notify.create({
-    icon: icon == null ? 'close' : icon,
+    icon: icon === 'undefined' ? 'close' : icon,
     position: 'bottom-right',
     color: 'negative',
     message: message == null ? $t('messages.event.error') : message,
