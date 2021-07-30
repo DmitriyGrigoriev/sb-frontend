@@ -7,8 +7,8 @@
       option-label="name"
       option-value="id"
       behavior="menu"
-      :dense="dense"
-      :options-dense="dense"
+      :dense="setDenseMode"
+      :options-dense="optionsDense"
       outlined
       :hint="hint ? hint : void 0"
       label-color="secondary"
@@ -16,7 +16,7 @@
       dropdown-icon="unfold_more"
       map-options
       emit-value
-      clearable
+      :clearable="clearable"
       :readonly="readonly"
       hide-bottom-space
     >
@@ -48,12 +48,19 @@ export default {
       type: String,
       default: ''
     },
+    setDense: {
+      type: Boolean,
+      default: false
+    },
     optionsDense: {
       type: Boolean,
       default: false
     },
     options: {
       type: Array
+    },
+    clearable: {
+      type: Boolean
     },
     value: [String, Number, Boolean],
     hint: { type: String },
@@ -98,6 +105,14 @@ export default {
       }
 
       return selectOptions
+    },
+    setDenseMode: {
+      get () {
+        return this.$props.setDense
+      },
+      set (val) {
+        this.$emit('update:dense', val)
+      }
     }
   },
   data () {
