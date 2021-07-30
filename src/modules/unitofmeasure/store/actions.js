@@ -1,6 +1,17 @@
 import { handleError } from '@/utils'
 import { dictionaryService } from '@/services'
 
+// Commit selected dictionary table from DictionalySelect component
+export function setSelected ({ commit }, payload) {
+  commit('SET_SELECTED', payload)
+  commit('SET_DICTIONARY')
+}
+
+export function setDictionary ({ commit }) {
+  commit('SET_DICTIONARY')
+}
+
+// «Unit of Measure» («Единица Измерения»)
 export function fetchMeasure ({ dispatch }, query) {
   return dictionaryService
     .fetchMeasure(query)
@@ -24,12 +35,30 @@ export function putMeasure ({ dispatch }, payload) {
 export function deleteMeasure ({ dispatch }, payload) {
   return dictionaryService.deleteMeasure(payload)
 }
+// End «Unit of Measure» («Единица Измерения»)
 
-// export function uploadUserAvatar ({}, payload) {
-//   return profileService.uploadUserAvatar(payload)
-// }
-//
-// export function chooseAvatar ({}, payload) {
-//   console.log(payload)
-//   return profileService.chooseAvatar(payload)
-// }
+// «VAT Posting Group» («НДС  Учетная Группа»)
+export function fetchVat ({ dispatch }, query) {
+  return dictionaryService
+    .fetchVat(query)
+    .catch(err => {
+      handleError(err)
+    })
+}
+
+export function getVat ({ dispatch }, payload) {
+  return dictionaryService.getVat(payload)
+}
+
+export function postVat ({ dispatch }, payload) {
+  return dictionaryService.postVat(payload)
+}
+
+export function putVat ({ dispatch }, payload) {
+  return dictionaryService.putVat(payload)
+}
+
+export function deleteVat ({ dispatch }, payload) {
+  return dictionaryService.deleteVat(payload)
+}
+// End «VAT Posting Group» («НДС  Учетная Группа»)
