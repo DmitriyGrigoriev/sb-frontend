@@ -4,6 +4,7 @@
     :label="label"
     :dense="dense"
     :hint="hint"
+    :disable="disable"
     @input="handleInput"
     stack-label
     outlined
@@ -23,6 +24,7 @@ export default {
       type: Boolean,
       default: false
     },
+    disable: Boolean,
     value: Boolean
   },
   data () {
