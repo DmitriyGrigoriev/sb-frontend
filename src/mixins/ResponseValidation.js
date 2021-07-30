@@ -20,7 +20,6 @@ const ValidationResponseHandler = {
       return Object.prototype.hasOwnProperty.call(this.errors, field)
     },
     getError (field) {
-      // return 'Единица Измерения с таким Код Ед. Измерения уже существует.'
       return Object.prototype.hasOwnProperty.call(this.errors, field) ? this.errors[field][0] : null
     },
     getErrors (field) {
