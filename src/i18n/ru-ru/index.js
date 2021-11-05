@@ -8,10 +8,17 @@ export default {
   messages: {
     event: {
       loading: 'Загрузка',
-      save: 'Данные записаны.',
+      save: 'Данные успешно сохранены.',
       delete: 'Данные удалены.',
-      error: 'Произошла ошибка.'
+      error: 'Произошла ошибка.',
+      error404: 'Ой. Здесь ничего нет...',
+      custom_error: 'Ошибка выполнения:'
     }
+  },
+  rules: {
+    required: '* Это поле не может быть пустым',
+    someEnter: 'Пожалуйста, введите что-нибудь.',
+    notEmpty: '* Select one'
   },
   labels: {
     name: 'Имя',
@@ -47,7 +54,8 @@ export default {
       placeholder: 'Поиск...'
     },
     delete: {
-      label: 'Удалить'
+      label: 'Удалить',
+      tooltip: 'Удалить'
     },
     close: {
       label: 'Закрыть'
@@ -98,6 +106,7 @@ export default {
       type: 'positive',
       icon: 'fa-check-circle',
       position: 'bottom-right',
+      color: 'grey-8',
       timeout: '2500'
     }
   },
@@ -106,14 +115,6 @@ export default {
       title: 'Главная',
       path: '/home',
       name: 'home_index'
-    }
-  },
-  table: {
-    props: {
-      no_data_available: 'Запрос не вернул данные',
-      rows_per_page: 'Строк на странице',
-      no_filter_result: 'Для этого выражения фильтра нет данных',
-      loading: 'Загрузка...'
     }
   },
   auth: {
@@ -267,6 +268,12 @@ export default {
         status: '400',
         message: 'Cервер не смог понять запрос из-за недействительного синтаксиса.'
       },
+      conflict: {
+        status: '409',
+        message: 'Попытка cохранить данные не удалось, потому что другой пользователь обновил или удалил запись. ' +
+          'Ваши изменения не были отражены на сервере. ' +
+          'Пожалуйста, получите новые значения перед их изменением и повторной попыткой сохранения.'
+      },
       network_error: {
         status: '460',
         message: 'Ошибка сети. Пожалуйста, проверьте подключение к интернету.'
@@ -285,24 +292,6 @@ export default {
       }
     }
   },
-  // Permission
-  // permission: {
-  //   role: {
-  //     role: 'Настройка роли',
-  //     role_user: 'Управление ролями пользователя',
-  //     role_rights: 'Управление правами роли',
-  //   },
-  //   user: {
-  //     user: 'Управление пользователями',
-  //     user_role: 'Управление ролями пользователей',
-  //   },
-  //   errors: {
-  //     no_permission: {
-  //       status: '@:responses.errors.no_permission.status',
-  //       message: '@:responses.errors.no_permission.message',
-  //     },
-  //   },
-  // },
   // Menus.vue
   components: {
     shortcuts: {
@@ -321,7 +310,7 @@ export default {
       message: 'Полезных ссылок пока нет.'
     }
   },
-  menus: {
+  shortcuts: {
     dashboard: {
       label: 'Панель управления'
     },
@@ -337,36 +326,67 @@ export default {
     settings: {
       label: 'Настройки'
     },
+    setup: {
+      label: 'Настройка биллинга'
+    },
     askhelp: {
       label: '#Помощь',
       url: 'https://smart-billing.slack.com'
     },
     logout: {
       label: 'Выход'
+    },
+    service: {
+      label: 'Услуги и Цены'
     }
   },
-  // roles: {
-  //   role: {
-  //     name: 'Имя роли',
-  //     code: 'Код роли',
-  //     id: 'Ид'
-  //   }
-  // },
   // Pages
   pages: {
     dictionary: {
       title: 'Настроечные таблицы',
+      mode: {
+        add: {
+          title: 'Добавление'
+        },
+        edit: {
+          title: 'Редактирование'
+        }
+      },
+      dialogues: {
+        reset: {
+          title: 'Подтвердите',
+          message: 'Вы уверены, что хотите очистить форму?',
+          buttons: {
+            ok: '@:buttons.ok.label',
+            cancel: '@:buttons.cancel.label'
+          }
+        },
+        postsave: {
+          title: 'Ваши действия',
+          message: 'Хотите ввести еще одну запись ? ' +
+            'Нажмите <strong>Продолжить</strong>, если Да, или <strong>Вернуться</strong> если хотите вернуться ' +
+            'в режим просмотра справочника.',
+          buttons: {
+            ok: 'Вернуться',
+            cancel: 'Продолжить'
+          }
+        },
+        beforeleave: {
+          title: '',
+          message: 'Вы действительно хотите уйти с этой страницы? Данные не будут сохранены.'
+        },
+        confirm_delete: {
+          title: 'Подтвердите',
+          message: 'Вы уверены, что хотите удалить отмеченные записи?',
+          buttons: {
+            ok: '@:buttons.delete.label',
+            cancel: '@:buttons.cancel.label'
+          }
+        }
+      },
       measure: {
         title: 'Единицы Измерения',
         help: 'ОКЕИ — Общероссийский классификатор единиц измерения',
-        mode: {
-          add: {
-            title: 'Добавление'
-          },
-          edit: {
-            title: 'Редактирование'
-          }
-        },
         field: {
           code: {
             label: 'Код Ед. Измерения',
@@ -387,40 +407,7 @@ export default {
             tooltip: '@:buttons.refresh.tooltip'
           }
         },
-        dialogues: {
-          reset: {
-            title: 'Подтвердите',
-            message: 'Вы уверены, что хотите очистить форму?',
-            buttons: {
-              ok: '@:buttons.ok.label',
-              cancel: '@:buttons.cancel.label'
-            }
-          },
-          postsave: {
-            title: 'Успешное сохранение',
-            message: 'Вы хотите ввести еще одну еденицу измерения ? ' +
-              'Нажмите <strong>Далее</strong>, если Да, или <strong>В начало</strong> если хотите вернуться ' +
-              'в режим просмотра справочника.',
-            buttons: {
-              ok: 'В начало',
-              cancel: 'Далее'
-            }
-          },
-          beforeleave: {
-            title: '',
-            message: 'Вы действительно хотите уйти с этой страницы? Данные не будут сохранены.'
-          },
-          confirm_delete: {
-            title: 'Подтвердите',
-            message: 'Вы уверены, что хотите удалить отмеченные записи?',
-            buttons: {
-              ok: '@:buttons.ok.label',
-              cancel: '@:buttons.cancel.label'
-            }
-          }
-        },
         add: {
-          title: 'Единицы Измерения',
           help: {
             title: 'Помощь',
             message: '<p>Добавьте в Общероссийский классификатор единиц измерения ' +
@@ -450,6 +437,157 @@ export default {
             label: 'Освоб. от НДС',
             hint: 'Признак освобождения от НДС.'
           }
+        }
+      },
+      noseries: {
+        title: 'Серия Номеров',
+        field: {
+          code: {
+            label: 'Код Серии Номеров',
+            hint: 'Введите условное обозначение кода серии номеров.'
+          },
+          description: {
+            label: 'Описание',
+            hint: 'Введите описание кода серии номеров.'
+          },
+          date_order: {
+            label: 'Порядок Дат',
+            hint: 'Будет ли учитываться порядок дат.'
+          }
+        }
+      },
+      noseriesline: {
+        title: 'Серия Номеров Строка',
+        banner: {
+          blocked: {
+            text: 'Для просмотра не актуальных Серий Номеров нажмите кнопку',
+            button: {
+              label: 'Заблокированные'
+            }
+          },
+          unblocked: {
+            text: 'Для просмотра актуальных Серий Номеров нажмите кнопку',
+            button: {
+              label: 'Актуальные'
+            }
+          }
+        },
+        field: {
+          series_no: {
+            label: 'Серия Но',
+            hint: 'Введите условное обозначение кода серии номеров.'
+          },
+          starting_date: {
+            label: 'Дата начала',
+            hint: 'Введите начальную дату серии номеров.'
+          },
+          starting_no: {
+            label: 'Начальный Но',
+            hint: 'Введите начальный номер серии номеров.'
+          },
+          ending_no: {
+            label: 'Конечный Но',
+            hint: 'Введите конечный номер серии номеров.'
+          },
+          last_date_used: {
+            label: 'Посл.Исп. Дата',
+            hint: 'Последняя использованная дата серии номеров.'
+          },
+          warning_no: {
+            label: 'Предупредительный Но',
+            hint: 'Введите номер, после которого будут выдаваться предупреждения.'
+          },
+          last_no_used: {
+            label: 'Последний использованный Но',
+            hint: 'Последний номер, использованный в серии номеров.'
+          },
+          increment_by: {
+            label: 'Увеличивать На',
+            hint: 'Введите число, на которое будет увеличиваться серия номеров.'
+          },
+          blocked: {
+            label: 'Заблокирована ?',
+            hint: 'Заблокирована ли данная серия номеров.'
+          }
+        }
+      },
+      servicetype: {
+        title: 'Тип Услуги',
+        field: {
+          code: {
+            label: 'Код Типа Услуг',
+            hint: 'Введите условное обозначение кода типа услуг.'
+          },
+          description: {
+            label: 'Описание',
+            hint: 'Введите описание кода типа услуг.'
+          }
+        }
+      },
+      service: {
+        title: 'Услуга',
+        field: {
+          code: {
+            label: 'Код Услуги',
+            hint: 'Введите условное обозначение кода услуги.'
+          },
+          description: {
+            label: 'Краткое описание услуги',
+            hint: 'Введите краткое описание услуги.'
+          },
+          full_name: {
+            label: 'Полное наименование услуги',
+            hint: 'Введите полное наименование услуги.'
+          },
+          service_type: {
+            label: '@:pages.dictionary.servicetype.title',
+            hint: ''
+          },
+          unit_of_measure: {
+            label: '@:pages.dictionary.measure.title',
+            hint: ''
+          },
+          vat_posting_group: {
+            label: '@:pages.dictionary.vat.title',
+            hint: ''
+          },
+          unit_price: {
+            label: 'Цена Единицы',
+            hint: 'Введите цену услуги.'
+          },
+          price_date: {
+            label: 'Дата начала',
+            hint: 'Введите дату начала действия цены по услуге.'
+          },
+          external_service_code: {
+            label: 'Внешний Код Услуги',
+            hint: 'Введите внешний rод услуги.'
+          }
+        }
+      }
+    },
+    setup: {
+      noseries: {
+        title: 'Серия номеров по умолчанию',
+        subtitle: 'Указанная серия номеров будет использоваться в справочниках для автогенерации.'
+      }
+    },
+    users: {
+      manage: {
+        title: {
+          manage: 'Управление пользователями',
+          assignRoles: 'Назначение ролей',
+          selectRoles: 'Выберите роль, которую нужно назначить пользователю'
+        },
+        search: {
+          placeholder: 'Фильтр по пользователям'
+        },
+        messages: {
+          noUserFound: 'Пользователи не найдены'
+        },
+        tooltips: {
+          hasEmail: 'Пользователь подтвердил свою почту.',
+          assignRoles: 'Назначить роли'
         }
       }
     }
