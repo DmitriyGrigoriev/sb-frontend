@@ -1,13 +1,5 @@
-// import { client } from '@/boot/apollo';
-// import request from '@/libs/requestdata'
-// import { handleResponse, handleError } from '@/libs/util'
 import { apiService } from './api.service'
-// import { storageService } from './storage.service'
-import {
-  CREATE_TOKEN
-  // REFRESH_TOKEN
-} from '@/queries'
-// import { handleResponse } from '@/utils'
+import { authQueries } from '@/queries'
 
 // import {
 //   REGISTER_MUTATION,
@@ -63,10 +55,11 @@ export const authService = {
    * @throws AuthenticationError
    **/
   async login ({ username, password }) {
-    CREATE_TOKEN.data.email = username
-    CREATE_TOKEN.data.password = password
+    const query = authQueries.createToken()
+    query.data.email = username
+    query.data.password = password
 
-    const response = await apiService.customRequest(CREATE_TOKEN)
+    const response = await apiService.customRequest(query)
 
     // Initial axios interceptor to handle 401
     // error and refresh access token
