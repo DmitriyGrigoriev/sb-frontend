@@ -2,7 +2,7 @@
   <q-card :style="$q.screen.xs ? void 0 : 'width:400px'">
     <q-toolbar class="bg-info text-white">
       <q-toolbar-title class="absolute-center text-subtitle1"
-        >Assign Role</q-toolbar-title
+        >{{ $t('pages.users.manage.title.assignRoles') }}</q-toolbar-title
       >
       <q-space />
       <q-btn flat round dense icon="close" @click="$emit('close')"></q-btn>
@@ -11,14 +11,14 @@
     <q-separator />
 
     <div class="q-pa-md">
-      <q-item-label class="q-mb-md">Select role to assign to user</q-item-label>
+      <q-item-label class="q-mb-md">{{ $t('pages.users.manage.title.selectRoles') }}</q-item-label>
       <q-option-group :options="roles" v-model="model" type="checkbox" />
     </div>
 
     <q-card-actions align="right">
-      <q-btn flat label="Cancel" @click="$emit('close')" />
+      <q-btn flat :label="$t('buttons.cancel.label')" @click="$emit('close')" />
       <q-btn
-        label="Save"
+        :label="$t('buttons.submit.label')"
         color="primary"
         @click="saveRoles"
         :loading="loading"
