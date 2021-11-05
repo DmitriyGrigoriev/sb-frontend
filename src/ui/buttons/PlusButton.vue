@@ -1,6 +1,6 @@
 <template>
   <q-btn
-    label="Add"
+    :label="$t('buttons.add.label')"
     icon="add"
     color="primary"
     @click="$emit('click')"
