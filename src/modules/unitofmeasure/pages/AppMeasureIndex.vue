@@ -1,11 +1,7 @@
 <template>
   <page-container>
     <template v-slot:title>
-      <page-title
-        :title="$t('pages.dictionary.title')"
-        icon="fas fa-snowflake"
-      >
-      </page-title>
+      <form-page-title/>
     </template>
 
     <div class="q-pa-md">
@@ -14,19 +10,18 @@
         :columns="columns"
         :loading="loading"
         :pagination.sync="serverPagination"
+        someFunctionParent="someFunction"
         @request="requestUnitOfMeasure"
         @rowclick="rowClicked"
         @addrow="addRow"
         @deleterows="deleteRows"
+        @refetch="refetch"
         :selected.sync="selected"
         selection="multiple"
       >
 <!--        :title="$t('pages.dictionary.measure.title')"-->
         <template v-slot:top-left>
-          <dictionary-select
-            ref="selectDictionary"
-          >
-          </dictionary-select>
+          <dictionary-select/>
         </template>
 
       </data-table>
@@ -38,21 +33,21 @@
 <script>
 /* eslint-disable camelcase */
 import { mapActions } from 'vuex'
-import PageContainer from '@/ui/page/PageContainer.vue'
-import PageTitle from '@/ui/page/PageTitle.vue'
+import { handleResponse } from '@/utils'
+import PageContainer from '@/ui/page/PageContainer'
+import FormPageTitle from '../components/AppFormPageTitle'
 import DataTable from '../components/DataTable'
 import DictionarySelect from '../components/DictionarySelect'
-import { handleError, handleResponse } from '@/utils'
 import DataTableMixin from '../mixins/DataTable'
 
 export default {
   name: 'UnitOfMeasureIndex',
   mixins: [DataTableMixin],
   components: {
-    DataTable,
-    DictionarySelect,
     PageContainer,
-    PageTitle
+    FormPageTitle,
+    DataTable,
+    DictionarySelect
   },
   data () {
     return {
@@ -81,11 +76,10 @@ export default {
       ]
     }
   },
-  computed: {
-  },
   methods: {
     ...mapActions('measure', ['fetchMeasure', 'deleteMeasure']),
     refetch () {
+      this.selected = []
       this.requestUnitOfMeasure(this.defaultPagination)
     },
     async requestUnitOfMeasure (props) {
@@ -103,27 +97,21 @@ export default {
       }, 500)
     },
     deleteRows () {
-      this.deleteMeasure(this.selected)
-        .then(() => {
-          this.refetch()
-        })
-        .catch(error => {
-          handleError(error)
-        })
-        .finally(() => this.$q.loading.hide())
-    },
-    showHelp () {
-      const content = this.$t('pages.dictionary.measure.help')
-      this.$q.dialog({
-        title: this.$t('pages.dictionary.measure.title'),
-        message: content,
-        html: true,
-        cancel: true
-      })
+      for (const payload of this.selected) {
+        this.$store.dispatch('measure/deleteMeasure', payload)
+          .then((res) => {
+          // call mixin method
+          })
+          .catch((error) => {
+            if (error.response.status === 550) {
+              this.$bus.$emit('table-error', error)
+            }
+          })
+      }
     }
-  },
-  created () {}
+  }
 }
+
 </script>
 
 <style scoped>
