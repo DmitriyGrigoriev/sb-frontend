@@ -1,6 +1,6 @@
 export default function () {
   return {
-    defaultRoute: '',
+    routeName: '',
     defaultOption: {}
   }
 }
