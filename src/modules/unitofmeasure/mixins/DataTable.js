@@ -1,8 +1,10 @@
-import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 const DataTableMixin = {
   data () {
     return {
       loading: false,
+      dataError: false,
+      dataErrorMessage: '',
       serverData: [],
       serverPagination: {
         page: 1,
@@ -13,7 +15,6 @@ const DataTableMixin = {
     }
   },
   computed: {
-    ...mapGetters('measure', ['routeOption']),
     defaultPagination () {
       return {
         pagination: this.serverPagination,
@@ -22,6 +23,7 @@ const DataTableMixin = {
     }
   },
   methods: {
+    ...mapActions('measure', ['setSelected']),
     defaultQuery (props) {
       const query = {
         page: props.pagination.page,
@@ -30,43 +32,22 @@ const DataTableMixin = {
       }
       return query
     },
-    getRouteName (routeType) {
-      switch (routeType) {
-        case 'add':
-          return this.routeOption.router[0].add.name
-        case 'edit':
-          return this.routeOption.router[0].edit.name
-        case 'delete':
-          return this.routeOption.router[0].delete.name
-      }
-    },
     addRow () {
-      this.$router.push(this.getRouteName('add'))
+      this.$router.push(`add-${this.$route.meta.indexPage}`)
     },
     rowClicked (evt, row) {
-      this.$router.push({ path: `${this.getRouteName('edit')}/${row.id}` })
-      // this.$router.push({ path: `edit-measure/${row.id}` })
+      this.$router.push({
+        path: `${`edit-${this.$route.meta.indexPage}`}/${row.id}`
+      })
     }
   },
   created () {
-    // if (Object.prototype.hasOwnProperty.call(this, 'add-row')) {
-    //   this.$bus.$on('add-row', (event) => {
-    //     this.addRow()
-    //   })
-    // }
-    // if (Object.prototype.hasOwnProperty.call(this, 'delete-row')) {
-    //   this.$bus.$on('delete-row', (event) => {
-    //     this.delete()
-    //   })
-    // }
     if (Object.prototype.hasOwnProperty.call(this, 'refetch')) {
-      this.$bus.$on('refetch', (event) => {
-        this.refetch()
-      })
       this.refetch({
         pagination: this.serverPagination
       })
     }
+    this.setSelected(this.$route.name)
   }
 }
 export default DataTableMixin
