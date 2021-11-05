@@ -6,12 +6,12 @@
     <q-input
       square
       outlined
-      clearable
+      :clearable="clearable"
       hide-bottom-space
       label-color="orange-10"
       v-model="model"
       :type="type"
-      :dense="$q.screen.lt.md"
+      :dense="dense"
       :readonly="readonly"
       :rules="rules"
       :max-length="maxlength"
@@ -55,6 +55,10 @@ export default {
     placeholder: String,
     error: Boolean,
     errorMessage: String,
+    clearable: {
+      type: Boolean,
+      default: true
+    },
     withNa: {
       type: Boolean,
       default: false
