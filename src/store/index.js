@@ -6,6 +6,7 @@ import components from './modules/components'
 
 import auth from '@/modules/auth/store'
 import users from '@/modules/users/store'
+import setup from '@/modules/setup/store'
 import measure from '@/modules/unitofmeasure/store'
 
 Vue.use(Vuex)
@@ -21,6 +22,7 @@ const Store = new Vuex.Store({
     users,
     settings,
     components,
+    setup,
     measure
   },
   // enable strict mode (adds overhead!)
