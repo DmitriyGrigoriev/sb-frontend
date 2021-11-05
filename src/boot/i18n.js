@@ -6,15 +6,15 @@ import ruRU from 'src/i18n/ru-ru/index'
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
-  locale: 'ru-ru',
-  fallbackLocale: 'ru-ru',
+  locale: 'ru',
+  fallbackLocale: 'ru',
   messages
 })
 
 export default ({ app }) => {
   // Set i18n instance on app
   app.i18n = i18n
-  app.i18n.mergeLocaleMessage('ru-ru', ruRU)
+  app.i18n.mergeLocaleMessage('ru', ruRU)
 }
 
 export { i18n }
