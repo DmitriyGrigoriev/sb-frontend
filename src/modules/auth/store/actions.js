@@ -1,5 +1,5 @@
 import { Loading, Dialog } from 'quasar'
-import { handleError, handleResponse } from '@/utils'
+import { handleError, handleResponse, HandleErrorClass } from '@/utils'
 import {
   showErrorNotification,
   showSuccessNotification
@@ -7,16 +7,14 @@ import {
 import { authService } from '@/services/auth.service'
 import { profileService } from '@/services/profile.service'
 import { storageService, apiService } from '@/services'
-import {
-  REFRESH_TOKEN
-} from '@/queries'
+import { authQueries } from '@/queries'
 
 export function register ({ commit }, payload) {
   Loading.show()
   return authService
     .register(payload)
     .then(res => {
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
       console.log('response', res)
       Dialog.create({
         title: 'Registration Successful',
@@ -26,7 +24,7 @@ export function register ({ commit }, payload) {
       })
     })
     .catch(err => {
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
       commit('SET_ERROR', err.message)
     })
     .finally(() => Loading.hide())
@@ -44,7 +42,7 @@ export function signinUser ({ commit, dispatch }, payload) {
     .then(response => {
       commit('SET_TOKEN', handleResponse(response).access)
       commit('SET_REFRESH_TOKEN', handleResponse(response).refresh)
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
       dispatch('getCurrentUser')
       // this.$router.push({ path: '/dashboard' })
       // this.$router.replace({ name: 'dashboard' })
@@ -53,24 +51,27 @@ export function signinUser ({ commit, dispatch }, payload) {
     })
     .catch(error => {
       // commit('SET_LOADING', false)
+      const message = new HandleErrorClass(error).message
       commit('CLEAR_TOKEN')
-      commit('SET_ERROR', handleError.message(error, false))
+      commit('SET_ERROR', message)
+      handleError(error)
+      // commit('SET_ERROR', handleError.message(error, false))
       // handleError(error)
     })
     .finally(() => Loading.hide())
 }
 
 export function getCurrentUser ({ commit }) {
-  commit('SET_LOADING', true)
+  // commit('SET_LOADING', true)
 
   return profileService
     .getCurrentUser()
     .then(res => {
       commit('SET_USER', handleResponse(res))
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
     })
     .catch(err => {
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
       handleError(err)
     })
 }
@@ -79,24 +80,29 @@ export function clearError ({ commit }) {
   commit('CLEAR_ERROR')
 }
 
-export async function signoutUser ({ commit }) {
-  // see https://github.com/apollographql/apollo-cache-persist/issues/34#issuecomment-371177206 for info in purging cache
-
-  // clear client store, this will not refetch queries unlike resetStore
-  // client.clearStore()
-  //
-  // persistor.purge()
-
+export async function clearStore ({ commit }) {
   // remove user data from store
   commit('CLEAR_USER')
   // clear the token
   commit('CLEAR_TOKEN')
   // clear the refresh token
   commit('CLEAR_REFRESH_TOKEN')
+}
+
+export async function signoutUser ({ dispatch }) {
+  // see https://github.com/apollographql/apollo-cache-persist/issues/34#issuecomment-371177206 for info in purging cache
+
+  // clear client store, this will not refetch queries unlike resetStore
+  // client.clearStore()
+  //
+  // persistor.purge()
+  dispatch('clearStore')
   authService.logout()
 
   // redirect to login page
-  this.$router.replace({ name: 'login' })
+  this.$router.replace({ name: 'login' }).catch(() => {
+    // Avoid it redundant route error
+  })
 }
 /**
  * Refresh the access token.
@@ -112,8 +118,9 @@ export async function refreshToken ({ commit }) {
     commit('CLEAR_TOKEN')
     await this.$router.push('/login')
   }
-  REFRESH_TOKEN.data.refresh = refreshToken
-  const response = await apiService.customRequest(REFRESH_TOKEN)
+  const query = authQueries.refreshToken()
+  query.data.refresh = refreshToken
+  const response = await apiService.customRequest(query)
 
   // Save newest access token
   commit('SET_TOKEN', handleResponse(response).access)
@@ -127,9 +134,7 @@ export function forgotPassword (f = {}, email) {
     .forgotPassword({ email: email })
     .then(res => {
       if (res.forgotPassword.status === 'EMAIL_NOT_SENT') {
-        showErrorNotification({
-          message: res.forgotPassword.message
-        })
+        showErrorNotification(res.forgotPassword.message)
       } else {
         showSuccessNotification({
           message: res.forgotPassword.message
@@ -190,9 +195,7 @@ export function updatePassword ({ dispatch }, payload) {
       }
     })
     .catch(err => {
-      showErrorNotification({
-        message: err.message
-      })
+      showErrorNotification(err.message)
     })
     .finally(() => Loading.hide())
 }
