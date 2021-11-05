@@ -1,5 +1,5 @@
 <template>
-  <q-btn icon="refresh" :label="$q.screen.lt.md ? void 0: 'Refresh'" outline class="q-ml-sm" @click="$emit('click')">
+  <q-btn icon="refresh" :label="$q.screen.lt.md ? void 0: $t('buttons.refresh.label')" outline class="q-ml-sm" @click="$emit('click')">
     <q-tooltip v-if="tooltip">{{tooltip}}</q-tooltip>
   </q-btn>
 </template>
@@ -10,7 +10,7 @@ export default {
   props: {
     tooltip: {
       type: String,
-      default: 'Refresh'
+      default: 'Обновить'
     }
   }
 }
