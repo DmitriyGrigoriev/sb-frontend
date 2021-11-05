@@ -1,8 +1,16 @@
 import { handleError } from '@/utils'
+import {
+  showSuccessNotification
+} from '@/functions/function-show-notifications'
 
 const ValidationResponseHandler = {
-  created () {
-    this.errors = {}
+  data () {
+    return {
+      errors: {}
+    }
+  },
+  mounted () {
+    this.clearErrors()
   },
   methods: {
     syncErrors (error) {
@@ -15,8 +23,11 @@ const ValidationResponseHandler = {
     },
     clearErrors () {
       this.errors = {}
+      this.$bus.$emit('clear-table-error')
     },
     hasErrors (field) {
+      // console.log('field:', field)
+      // console.log('errors', Object.prototype.hasOwnProperty.call(this.errors, field))
       return Object.prototype.hasOwnProperty.call(this.errors, field)
     },
     getError (field) {
@@ -25,12 +36,18 @@ const ValidationResponseHandler = {
     getErrors (field) {
       return Object.prototype.hasOwnProperty.call(this.errors, field) ? this.errors[field] : null
     },
-    showErrorNotification (error) {
-      this.$q.notify({
-        type: 'negative',
-        message: handleError.message(error, false),
-        position: 'bottom-right'
-      })
+    responseError (error) {
+      if (typeof error.response !== 'undefined' && (error.response.status === 400 || error.response.status === 409)) {
+        if (error.response.status === 409) {
+          this.$bus.$emit('conflict-error')
+        }
+        this.syncErrors(error)
+      } else {
+        handleError(error)
+      }
+    },
+    successNotification () {
+      showSuccessNotification()
     }
   }
 }
