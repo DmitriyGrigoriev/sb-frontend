@@ -14,7 +14,9 @@ module.exports = function (ctx) {
       'vuelidate',
       // 'permission',
       'router-auth',
+      'test-error-handler',
       // 'error-handler',
+      // 'quasar-lang-pack',
       'loading-defaults'
     ],
 
@@ -88,7 +90,7 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       iconSet: 'material-icons', // Quasar icon set
-      lang: 'en-us', // Quasar language pack
+      lang: 'ru', // Quasar language pack
       config: {
         dark: 'auto',
         notify: { /* look at QUASARCONFOPTIONS from the API card (bottom of page) */ }
