@@ -7,14 +7,15 @@
 //   UPDATE_PROFILE_MUTATION,
 //   CHOOSE_AVATAR_MUTATION
 // } from '@/graphql/mutations';
-import { CURRENT_USER } from '@/queries'
+import { profileQueries } from '@/queries'
 import { apiService } from './api.service'
 
 export const profileService = {
   async getCurrentUser () {
     await apiService.mount401Interceptor()
     await apiService.setHeader()
-    return apiService.customRequest(CURRENT_USER)
+    return apiService.customRequest(profileQueries)
+    // return apiService.get(profileQueries.profile.url)
     // return response
     // return client
     //   .query({
