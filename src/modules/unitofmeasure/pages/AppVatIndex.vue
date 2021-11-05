@@ -1,12 +1,9 @@
 <template>
   <page-container>
     <template v-slot:title>
-      <page-title
-        :title="$t('pages.dictionary.title')"
-        icon="fas fa-snowflake"
-      >
-      </page-title>
+      <form-page-title/>
     </template>
+
     <div class="q-pa-md">
       <data-table
         :data="serverData"
@@ -17,10 +14,11 @@
         @rowclick="rowClicked"
         @addrow="addRow"
         @deleterows="deleteRows"
+        @refetch="refetch"
         :selected.sync="selected"
         selection="multiple"
-        :title="$t('pages.dictionary.vat.title')"
       >
+<!--        :title="$t('pages.dictionary.vat.title')"-->
 
         <template v-slot:body-cell-vatextempt="props">
           <q-td :props="props">
@@ -34,9 +32,7 @@
         </template>
 
         <template v-slot:top-left>
-          <dictionary-select
-          >
-          </dictionary-select>
+          <dictionary-select/>
         </template>
 
       </data-table>
@@ -50,22 +46,22 @@
 /* eslint-disable camelcase */
 import { mapActions } from 'vuex'
 import PageContainer from '@/ui/page/PageContainer.vue'
-import PageTitle from '@/ui/page/PageTitle.vue'
+import FormPageTitle from '../components/AppFormPageTitle'
 import DictionarySelect from '../components/DictionarySelect'
 import DataTable from '../components/DataTable'
-import { handleError, handleResponse } from '@/utils'
+import { handleResponse } from '@/utils'
 import { CheckboxInput } from '@/ui'
 import DataTableMixin from '../mixins/DataTable'
 
 export default {
-  name: 'VatIndex',
+  name: 'AppVatIndex',
   mixins: [DataTableMixin],
   components: {
     CheckboxInput,
     DictionarySelect,
     DataTable,
     PageContainer,
-    PageTitle
+    FormPageTitle
   },
   data () {
     return {
@@ -128,23 +124,8 @@ export default {
     },
     deleteRows () {
       this.deleteVat(this.selected)
-        .then(() => {
-          this.refetch()
-        })
-        .catch(error => {
-          handleError(error)
-        })
-        .finally(() => this.$q.loading.hide())
+      this.refetch()
     }
-    // showHelp () {
-    //   const content = this.$t('pages.dictionary.measure.help')
-    //   this.$q.dialog({
-    //     title: this.$t('pages.dictionary.measure.title'),
-    //     message: content,
-    //     html: true,
-    //     cancel: true
-    //   })
-    // }
   }
 }
 </script>
