@@ -29,7 +29,7 @@
           v-if="user.is_active"
           class="cursor-pointer"
         >
-          <q-tooltip>This user has verified email.</q-tooltip>
+          <q-tooltip>{{ $t('pages.users.manage.tooltips.hasEmail') }}</q-tooltip>
         </q-icon>
       </q-item-label>
     </q-item-section>
@@ -75,7 +75,7 @@
           @click="assignRoleDialog = true"
           :disable="user.role && user.role.name === 'superuser'"
         >
-          <q-tooltip>Assign Roles</q-tooltip>
+          <q-tooltip>{{ $t('pages.users.manage.tooltips.assignRoles') }}</q-tooltip>
         </q-btn>
       </div>
     </q-item-section>

@@ -1,11 +1,11 @@
 <template>
   <page-container>
-    <page-title title="Manage Users"></page-title>
+    <page-title :title="$t('pages.users.manage.title.manage')"></page-title>
 
     <!-- Search Field -->
     <search-component
       v-model="searchField"
-      placeholder="Filter Users"
+      :placeholder="$t('pages.users.manage.search.placeholder')"
     ></search-component>
 
     <div class="q-pa-sm">
@@ -19,7 +19,7 @@
       <template v-else>
         <!-- User List -->
         <template v-if="!filteredUsers">
-          <no-item message="No users to show"></no-item>
+          <no-item :message="$t('pages.users.manage.messages.noUserFound')"></no-item>
         </template>
         <template v-else>
           <div class="col">
@@ -58,9 +58,6 @@ export default {
       searchField: ''
     }
   },
-  mounted () {
-    this.$store.dispatch('users/fetchUsers')
-  },
   computed: {
     ...mapState('settings', ['dark']),
     ...mapGetters('users', ['users']),
@@ -93,6 +90,9 @@ export default {
     avatarColor () {
       return this.dark ? 'pink-13' : 'primary'
     }
+  },
+  mounted () {
+    this.$store.dispatch('users/fetchUsers')
   }
 }
 </script>
