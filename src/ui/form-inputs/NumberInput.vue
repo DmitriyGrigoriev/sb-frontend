@@ -4,7 +4,6 @@
     <q-input
       v-model="model"
       :dense="dense"
-      @input="val => $emit('input', val)"
       :readonly="readonly"
       :rules="rules"
       :hint="hint"
@@ -24,23 +23,19 @@ export default {
   name: 'NumberInput',
   props: ['label', 'value', 'readonly', 'rules', 'hint', 'suffix'],
   computed: {
-    ...mapState('settings', ['dense'])
-  },
-  data () {
-    return {
-      model: null
+    ...mapState('settings', ['dense']),
+    model: {
+      get () {
+        return this.$props.value
+      },
+      set (val) {
+        this.$emit('input', val)
+      }
     }
-  },
-  mounted () {
-    this.model = this.value
   }
 }
 </script>
 
-<style>
-input[type='number']::-webkit-inner-spin-button,
-input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+<style scoped>
+
 </style>
