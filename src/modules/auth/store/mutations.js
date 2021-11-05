@@ -1,8 +1,8 @@
 import { storageService } from '@/services/storage.service'
 
-export function SET_LOADING (state, payload) {
-  state.loading = payload
-}
+// export function SET_LOADING (state, payload) {
+//   state.loading = payload
+// }
 
 export function SET_ERROR (state, payload) {
   state.error = payload
