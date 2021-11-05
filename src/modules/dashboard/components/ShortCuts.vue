@@ -111,29 +111,29 @@ export default {
           hasAccess: ['reviewer']
         },
         {
-          label: 'Consolidators',
+          label: this.$t('shortcuts.service.label'),
           icon: 'pageview',
-          name: { name: 'consolidates' },
+          name: { name: 'service' },
           hasAccess: ['encoder']
         },
         {
-          label: this.$t('menus.profile.label'),
+          label: this.$t('shortcuts.profile.label'),
           icon: 'tune',
           name: { name: 'profile' },
           color: 'primary',
           hasAccess: []
         },
         {
-          label: this.$t('menus.security.label'),
+          label: this.$t('shortcuts.security.label'),
           icon: 'vpn_key',
           name: { name: 'security' },
           color: 'red',
           hasAccess: []
         },
         {
-          label: this.$t('menus.settings.label'),
+          label: this.$t('shortcuts.setup.label'),
           icon: 'settings',
-          name: { name: 'settings' },
+          name: { name: 'setup' },
           color: 'pink',
           hasAccess: []
         },
@@ -141,20 +141,6 @@ export default {
           label: this.$t('pages.dictionary.title'),
           icon: 'ac_unit',
           name: { name: 'measure' },
-          color: 'pink',
-          hasAccess: []
-        },
-        {
-          label: 'Тест',
-          icon: 'ac_unit',
-          name: { name: 'test-input' },
-          color: 'pink',
-          hasAccess: []
-        },
-        {
-          label: 'Тест таблицы',
-          icon: 'ac_unit',
-          name: { name: 'test-table' },
           color: 'pink',
           hasAccess: []
         }
