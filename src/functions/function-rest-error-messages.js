@@ -1,4 +1,4 @@
-import { Dialog } from 'quasar'
+import { Dialog, Notify } from 'quasar'
 
 export const restQLErrorMessages = errorsFromCatch => {
   const errors = errorsFromCatch.graphQLErrors[0]
@@ -38,15 +38,28 @@ export const showRestQLErrorMessage = error => {
         messages = messages + errors[key]
       }
 
-      // console.log(restQLErrors);
-      // const category = restQLErrorsCategory
-      // console.log(category)
-      // const errors = restQLErrors
-
       Dialog.create({
         color: 'red',
         title: field,
         message: messages
+      })
+    }
+  }
+}
+
+export const showCustomErrorMessage = error => {
+  if (error !== null) {
+    if (Object.prototype.hasOwnProperty.call(error, 'message')) {
+      const message = error.message
+
+      Notify.create({
+        icon: 'close',
+        position: 'bottom-right',
+        color: 'negative',
+        message: message,
+        timeout: 5000,
+        progress: true,
+        actions: null
       })
     }
   }
