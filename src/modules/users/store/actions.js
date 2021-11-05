@@ -16,7 +16,7 @@ class ActivationError extends Error {
 }
 
 export function fetchUsers ({ commit }) {
-  commit('SET_LOADING', true)
+  // commit('SET_LOADING', true)
   return userService
     .fetchUser()
     .then(res => {
@@ -27,7 +27,7 @@ export function fetchUsers ({ commit }) {
         }
         commit('ADD_USER', payload)
       })
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
     })
     .catch(err => console.log(err.message))
 }
@@ -37,7 +37,7 @@ export function getUser ({ commit }, user_Id) {
     .getUser(user_Id)
     .then(res => {
       const user = handleResponse(res)
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
       commit('ASSIGN_ROLE', user)
     })
     // .catch(error => {
@@ -51,7 +51,7 @@ export function getRoles ({ commit }) {
   return userService
     .getRoles()
     .then(res => {
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
       commit('SET_ROLES', handleResponse(res))
     })
     .catch(err => console.log(err.message))
@@ -105,7 +105,7 @@ export function assignRole ({ commit, state, dispatch }, payload) {
     .assignRole(payload)
     .then(res => {
       // const role = handleResponse(res)
-      commit('SET_LOADING', false)
+      // commit('SET_LOADING', false)
       dispatch('getUser', payload.user_id)
     })
     // .catch(err => handleError(err))
@@ -124,9 +124,7 @@ export function assignOperatingUnitToReview (_, payload) {
   //     console.log(res)
   //   })
   //   .catch(err => {
-  //     showErrorNotification({
-  //       message: err.message
-  //     })
+  //     showErrorNotification(message)
   //   })
 }
 
