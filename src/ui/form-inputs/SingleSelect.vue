@@ -1,71 +1,77 @@
+<!--https://forum.quasar-framework.org/topic/5596/q-select/12-->
 <template>
   <div class="col">
-    <span class="text-caption text-weight-bold">{{ label }}</span>
+    <span class="text-caption text-weight-bold">{{ label }} <mini-refresh v-if="withRefresh" @click="refetch" /></span>
     <q-select
       v-model="model"
-      :options="selectOptions"
-      option-label="name"
-      option-value="id"
-      behavior="menu"
-      :dense="setDenseMode"
-      :options-dense="optionsDense"
-      outlined
+      :options="options"
+      :option-label="optionlabel"
+      :option-value="optionvalue"
       :hint="hint ? hint : void 0"
-      label-color="secondary"
+      :dense="dense"
+      :options-dense="$q.screen.lt.md"
+      :readonly="readonly"
+      :loading="loading"
       :rules="rules"
+      :clearable="clearable"
+      :error="error"
+      :error-message="errorMessage"
+      outlined
+      behavior="menu"
+      label-color="secondary"
+      square
       dropdown-icon="unfold_more"
+      hide-bottom-space
       map-options
       emit-value
-      :clearable="clearable"
-      :readonly="readonly"
-      hide-bottom-space
     >
-      <template v-slot:before-options v-if="options.length > 10">
-        <q-item>
-          <q-item-section class="text-grey">
-            <q-input
-              ref="filter"
-              placeholder="Filter"
-              v-model="filterText"
-              outlined
-              :dense="dense"
-              autofocus
-            />
-          </q-item-section>
-        </q-item>
-      </template>
     </q-select>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import MiniRefresh from '../buttons/MiniRefresh'
 
 export default {
   name: 'SingleSelect',
+  components: { MiniRefresh },
   props: {
     label: {
       type: String,
       default: ''
     },
-    setDense: {
-      type: Boolean,
-      default: false
-    },
-    optionsDense: {
-      type: Boolean,
-      default: false
-    },
     options: {
       type: Array
     },
-    clearable: {
-      type: Boolean
+    optionlabel: {
+      type: String,
+      default: 'name'
     },
+    optionvalue: {
+      type: String,
+      default: 'id'
+    },
+    clearable: {
+      type: Boolean,
+      default: true
+    },
+    error: Boolean,
+    errorMessage: String,
     value: [String, Number, Boolean],
     hint: { type: String },
     rules: Array,
-    readonly: Boolean
+    readonly: Boolean,
+    // loading: {
+    //   type: Boolean,
+    //   default: false
+    // },
+    withRefresh: Boolean
+  },
+  data () {
+    return {
+      loading: false
+    }
   },
   computed: {
     ...mapState('settings', ['dense']),
@@ -76,49 +82,14 @@ export default {
       set (val) {
         this.$emit('input', val)
       }
-    },
-    selectOptions () {
-      const filterText = this.filterText.trim()
-      const options = this.$props.options
-
-      let selectOptions = []
-
-      if (!filterText) {
-        selectOptions = options
-      } else {
-        const filterTextLowerCase = filterText.toLowerCase()
-
-        const filteredOptions = options.filter(
-          v => v.name.toLowerCase().indexOf(filterTextLowerCase) > -1
-        )
-
-        if (!filteredOptions.length) {
-          selectOptions = [
-            {
-              id: 0,
-              name: 'No results'
-            }
-          ]
-        } else {
-          selectOptions = filteredOptions
-        }
-      }
-
-      return selectOptions
-    },
-    setDenseMode: {
-      get () {
-        return this.$props.setDense
-      },
-      set (val) {
-        this.$emit('update:dense', val)
-      }
     }
   },
-  data () {
-    return {
-      filterText: '',
-      filtering: false
+  methods: {
+    refetch () {
+      this.loading = true
+      // console.log('refetch called')
+      this.$emit('refetch')
+      this.loading = false
     }
   }
 }
