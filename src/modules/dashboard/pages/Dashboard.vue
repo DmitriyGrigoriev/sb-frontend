@@ -1,7 +1,7 @@
 <template>
   <page-container>
     <template v-slot:title>
-      <page-title :title="$t('menus.dashboard.label')" icon="fas fa-tachometer-alt"></page-title>
+      <page-title :title="$t('shortcuts.dashboard.label')" icon="fas fa-tachometer-alt"></page-title>
     </template>
 
     <q-banner class="bg-red-1" v-if="env === 'STAGING'">
@@ -36,10 +36,6 @@ import ReleasesComponent from '../components/Releases'
 import UsefulLinks from '../components/UsefulLinks'
 import { openURL } from 'quasar'
 import AnnouncementComponent from '../components/AnnouncementComponent'
-// import { FETCH_UNREAD_NOTIFICATIONS_QUERY } from '@/graphql/queries'
-// const ActivityComponent = () =>
-//   import(/* webpackChunkName: '' */ '../components/ActivityComponent.vue')
-// const ExchangeRate = () => import('../components/ExchangeRate.vue')
 
 export default {
   name: 'PageIndex',
@@ -55,11 +51,6 @@ export default {
     ...mapState('auth', ['user']),
     ...mapGetters('auth', ['isEncoder'])
   },
-  // apollo: {
-  //   unreadNotifications: {
-  //     query: FETCH_UNREAD_NOTIFICATIONS_QUERY
-  //   }
-  // },
   data () {
     return {
       env: process.env.APP_ENV,
