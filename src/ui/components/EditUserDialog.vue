@@ -4,7 +4,7 @@
 <!--    :content-css="{minWidth: '80vw', minHeight: '80vh'}"-->
     <dialog-container v-model="updateProfileDialog">
       <dialog-header
-        :title="$t('menus.labels.select_icon')"
+        :title="$t('shortcuts.labels.select_icon')"
         @close="updateProfileDialog = false"
       ></dialog-header>
       <q-form greedy @submit.prevent="handleFormSubmit" @reset="handleReset">
