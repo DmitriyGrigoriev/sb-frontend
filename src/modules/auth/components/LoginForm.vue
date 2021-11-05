@@ -56,7 +56,7 @@ import { mapState, mapGetters } from 'vuex'
 import { Loading } from 'quasar'
 import PasswordInput from '@/ui/form-inputs/PasswordInput'
 import EmailInput from '@/ui/form-inputs/EmailInput'
-import { validateEmail } from '@/utils'
+import { validateEmail, handleError } from '@/utils'
 
 export default {
   name: 'LoginForm',
@@ -106,12 +106,9 @@ export default {
           })
 
           this.$store.dispatch('auth/signinUser', payload)
-          // try {
-          //   this.$store.dispatch('auth/signinUser', payload)
-          //   this.$router.go()
-          // } catch (err) {
-          //   console.log(err.message)
-          // }
+            .catch(err => {
+              handleError(err)
+            })
         }
       })
     }
