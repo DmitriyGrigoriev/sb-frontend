@@ -82,6 +82,17 @@ const routes = [
         }
       },
       {
+        path: 'setup',
+        name: 'setup',
+        component: () =>
+          import(
+            /* webpackChunkName: 'SettingsPage' */ '@/modules/setup/pages/AppSetupPage.vue'
+          ),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
         path: 'profile',
         name: 'profile',
         component: () =>
