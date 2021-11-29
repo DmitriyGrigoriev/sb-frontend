@@ -6,7 +6,7 @@
       :placeholder="placeholder"
       v-model="searchField"
       :debounce="500"
-      :rules="[val => !!val >= 3 || 'Please enter something.']"
+      :rules="[val => !!val >= 3 || $t('rules.someEnter')]"
       lazy-rules
       dense
     >

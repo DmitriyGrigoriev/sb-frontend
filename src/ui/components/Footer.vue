@@ -20,7 +20,7 @@
         class="text-capitalize"
         @click="showAbout = true"
       >
-        About
+        {{ $t('components.about.label') }}
       </q-btn>
       <q-space />
       <span @click="help" class="cursor-pointer"> v. {{ version }} </span>

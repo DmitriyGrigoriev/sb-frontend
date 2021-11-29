@@ -2,7 +2,7 @@
   <q-card style="width:360px;" square>
     <div class="row justify-between q-pa-sm">
       <q-item-label header class="q-pa-none">
-        About
+        {{ $t('components.about.label') }}
       </q-item-label>
       <q-icon
         name="close"
