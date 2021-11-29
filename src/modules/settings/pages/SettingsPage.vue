@@ -1,6 +1,6 @@
 <template>
   <page-container>
-    <page-title :title="$t('menus.settings.label')"></page-title>
+    <page-title :title="$t('shortcuts.setup.label')"></page-title>
 
     <div class="row q-pa-sm">
       <div class="col-lg-4 col-md-6 col-xs-12">
