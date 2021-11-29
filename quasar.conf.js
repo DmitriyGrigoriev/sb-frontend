@@ -44,10 +44,9 @@ module.exports = function (ctx) {
       env: ctx.dev
         ? { // so on dev we'll have
           API: 'http://192.168.177.130:8000'
-          // API: 'http://109.71.14.28:80'
         }
         : { // and on build (production):
-          API: 'https://smart-billing.ru'
+          API: 'http://192.168.0.2:8000'
         },
       // extractCSS: false,
       extendWebpack(cfg) {
