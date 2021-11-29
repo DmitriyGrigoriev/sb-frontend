@@ -226,7 +226,8 @@ export default {
         vat_posting_group: this.vat_posting_group,
         unit_price: this.unit_price,
         prices: [],
-        external_service_code: this.external_service_code
+        external_service_code: this.external_service_code,
+        version: this.version
       }
       this.prices.forEach((price) => {
         payload.prices.push({
