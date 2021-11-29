@@ -20,10 +20,10 @@
     "test:e2e:CI": "cypress run",
     "deploy:staging": "cross-env QENV=staging firebase deploy -P staging --only hosting",
     "deploy:prod": "cross-env QENV=production firebase deploy -P default --only hosting",
-    "build": "cross-env QENV=production quasar build -m pwa",
+    "build": "cross-env QENV=production quasar build -m spa",
     "dev": "cross-env QENV=staging quasar dev",
     "staging": "cross-env QENV=staging quasar dev",
-    "build:staging": "cross-env QENV=staging quasar build -m pwa",
+    "build:staging": "cross-env QENV=staging quasar build -m spa",
     "dev:development": "cross-env QENV=development quasar dev",
     "dev:local": "cross-env QENV=local quasar dev"
   },
