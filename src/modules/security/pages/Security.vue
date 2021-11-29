@@ -1,7 +1,7 @@
 <template>
   <page-container>
     <template v-slot:title>
-      <page-title :title="$t('menus.security.label')" icon="fas fa-fingerprint"></page-title>
+      <page-title :title="$t('shortcuts.security.label')" icon="fas fa-fingerprint"></page-title>
     </template>
 
     <update-password></update-password>
