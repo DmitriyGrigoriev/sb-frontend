@@ -1,7 +1,6 @@
 import { Loading, QSpinnerGears } from 'quasar'
 
-const loading = {
-}
+const loading = {}
 let lastRequest = new Date('2018')
 
 loading.show = function (config) {
