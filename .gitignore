@@ -116,3 +116,20 @@ dist/
 test/cypress/videos/
 test/cypress/screenshots/
 
+.idea/dictionaries/
+.idea/inspectionProfiles/
+.idea/jsLibraryMappings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/sb-frontend.iml
+.idea/shelf/
+.idea/terminal.xml
+.idea/vcs.xml
+src/boot/permission.js
+src/modules/notifications/
+src/modules/programs/
+src/modules/projects/components/
+src/modules/projects/pages/
+src/modules/test/
+src/store/modules/components/index.js
+src/ui/page/PageContainer.vue.7z
