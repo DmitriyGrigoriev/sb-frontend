@@ -65,56 +65,63 @@ export default {
   data () {
     return {
       links: [
-        {
-          label: 'Projects',
-          icon: 'list',
-          name: { name: 'projects' },
-          color: 'blue',
-          hasAccess: ['encoder']
-        },
-        {
-          label: 'Add Project',
-          icon: 'playlist_add',
-          name: { name: 'add-project' },
-          color: 'secondary',
-          hasAccess: ['encoder'],
-          encoder: true
-        },
-        {
-          label: 'Review Projects',
-          icon: 'list',
-          name: { name: 'projects' },
-          color: 'blue',
-          hasAccess: ['reviewer']
-        },
-        {
-          label: 'Deleted Projects',
-          icon: 'delete',
-          name: { name: 'deleted-projects' },
-          color: 'red',
-          hasAccess: ['encoder']
-        },
-        {
-          label: 'Programs',
-          icon: 'view_module',
-          name: { name: 'programs' },
-          color: 'secondary',
-          hasAccess: ['encoder'],
-          encoder: true
-        },
-        {
-          label: 'Review Programs',
-          icon: 'rate_review',
-          name: { name: 'review' },
-          color: 'secondary',
-          reviewer: true,
-          hasAccess: ['reviewer']
-        },
+        // {
+        //   label: 'Projects',
+        //   icon: 'list',
+        //   name: { name: 'projects' },
+        //   color: 'blue',
+        //   hasAccess: ['encoder']
+        // },
+        // {
+        //   label: 'Add Project',
+        //   icon: 'playlist_add',
+        //   name: { name: 'add-project' },
+        //   color: 'secondary',
+        //   hasAccess: ['encoder'],
+        //   encoder: true
+        // },
+        // {
+        //   label: 'Review Projects',
+        //   icon: 'list',
+        //   name: { name: 'projects' },
+        //   color: 'blue',
+        //   hasAccess: ['reviewer']
+        // },
+        // {
+        //   label: 'Deleted Projects',
+        //   icon: 'delete',
+        //   name: { name: 'deleted-projects' },
+        //   color: 'red',
+        //   hasAccess: ['encoder']
+        // },
+        // {
+        //   label: 'Programs',
+        //   icon: 'view_module',
+        //   name: { name: 'programs' },
+        //   color: 'secondary',
+        //   hasAccess: ['encoder'],
+        //   encoder: true
+        // },
+        // {
+        //   label: 'Review Programs',
+        //   icon: 'rate_review',
+        //   name: { name: 'review' },
+        //   color: 'secondary',
+        //   reviewer: true,
+        //   hasAccess: ['reviewer']
+        // },
         {
           label: this.$t('shortcuts.service.label'),
           icon: 'pageview',
           name: { name: 'service' },
           hasAccess: ['encoder']
+        },
+        {
+          label: this.$t('pages.dictionary.title'),
+          icon: 'ac_unit',
+          name: { name: 'measure' },
+          color: 'pink',
+          hasAccess: []
         },
         {
           label: this.$t('shortcuts.profile.label'),
@@ -134,13 +141,6 @@ export default {
           label: this.$t('shortcuts.setup.label'),
           icon: 'settings',
           name: { name: 'setup' },
-          color: 'pink',
-          hasAccess: []
-        },
-        {
-          label: this.$t('pages.dictionary.title'),
-          icon: 'ac_unit',
-          name: { name: 'measure' },
           color: 'pink',
           hasAccess: []
         }
