@@ -61,17 +61,17 @@ export default {
       loading: false,
       useful_links: [
         {
-          title: 'PIP Guidelines',
+          title: 'Методические рекомендации',
           description: '',
           to: ''
         },
         {
-          title: 'Updated Philippine Development Plan',
+          title: 'Расчет и обновление данных',
           description: '',
           to: ''
         },
         {
-          title: 'PDP Results Matrices',
+          title: 'Финансовый результат',
           description: '',
           to: ''
         }
