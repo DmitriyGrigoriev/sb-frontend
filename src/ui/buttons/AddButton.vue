@@ -1,6 +1,6 @@
 <template>
   <q-btn
-    label="Add New"
+    label="Добавить"
     color="primary"
     to="/projects/add"
     v-if="isEncoder"
