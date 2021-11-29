@@ -6,11 +6,12 @@ const $t = translate
 
 export function showSuccessNotification (message, icon) {
   Notify.create({
-    icon: icon === 'undefined' ? 'check' : icon,
-    position: 'bottom-right',
-    color: 'primary',
+    icon: icon == null ? 'check' : icon,
+    position: $t('notify.default.position'),
+    color: $t('notify.default.color'),
     message: message == null ? $t('messages.event.save') : message,
-    timeout: 5000,
+    type: $t('notify.default.type'),
+    timeout: $t('notify.default.timeout'),
     progress: true,
     actions: null
   })
@@ -18,7 +19,7 @@ export function showSuccessNotification (message, icon) {
 
 export function showErrorNotification (message, icon) {
   Notify.create({
-    icon: icon === 'undefined' ? 'close' : icon,
+    icon: icon == null ? 'close' : icon,
     position: 'bottom-right',
     color: 'negative',
     message: message == null ? $t('messages.event.error') : message,
