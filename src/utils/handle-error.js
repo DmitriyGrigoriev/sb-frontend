@@ -16,12 +16,12 @@ const $t = translate
 // Custom errors
 // Todo: Write code to send error into outside back tracking system
 export class CustomError extends Error {
-  constructor (errorCode, message) {
+  constructor (status, message) {
     super(message)
     // this.name = this.constructor.name
     const title = $t('messages.event.custom_error')
     this.message = `${title} ${message}`
-    this.customErrorCode = errorCode
+    this.status = status
   }
 
   printError () {
@@ -36,15 +36,29 @@ export class HandleErrorClass {
   status = null
 
   constructor (error) {
+    // store original error
+    this.error = null
+
     if (typeof error.response !== 'undefined') {
-      this.status = this.error.response.status
+      this.status = error.response.status
     } else {
-      if (error.message !== 'Network Error') {
-        this.error = new CustomError(5000, error.message)
+      if (typeof error.code !== 'undefined' && error.code === 'ECONNABORTED') {
+        this.error = new CustomError(4000, error.message)
+      } else {
+        if (error.message !== 'Network Error') {
+          this.error = new CustomError(5000, error.message)
+        }
       }
     }
+    // if don't CustomError
+    if (this.error === null) {
+      this.error = error
+    }
+    // if status have been overridden to we rewrite it
+    if (typeof this.error.status !== 'undefined') {
+      this.status = this.error.status
+    }
     this.store = store
-    this.error = error
     this.message = this.errorMessage()
   }
 
@@ -69,12 +83,16 @@ export class HandleErrorClass {
         }
         break
       case 403:
+        showErrorNotification(this.message)
         return Promise.resolve()
       case 404:
         return Promise.resolve()
       case 405:
         return Promise.resolve()
       case 409:
+        return Promise.resolve()
+      case 4000:
+        showErrorNotification(this.message)
         return Promise.resolve()
       case 5000:
         this.error.printError()
@@ -99,7 +117,6 @@ export class HandleErrorClass {
         } else {
           this.message = $t('auth.login.verification_required')
         }
-        showErrorNotification(this.message)
         break
       case 404:
         this.message = $t('messages.event.error404')
@@ -117,12 +134,15 @@ export class HandleErrorClass {
       case 550:
         this.message = 'Protected Error'
         break
+      case 4000:
+        this.message = $t('responses.errors.service_timeout.message')
+        break
       case 5000:
         this.message = this.error.message
         showCustomErrorMessage(this.error)
         break
       default:
-        if (this.error.response.status >= 500) {
+        if (typeof this.error.response !== 'undefined' && typeof this.error.response.status !== 'undefined' && this.error.response.status >= 500) {
           this.message = $t('responses.errors.internal_server_error.message')
         } else {
           this.message = $t('responses.errors.network_error.message')
