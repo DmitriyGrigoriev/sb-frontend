@@ -30,7 +30,6 @@
   "dependencies": {
     "@quasar/extras": "^1.10.9",
     "axios": "^0.22.0",
-    "chokidar": "^3.5.0",
     "core-js": "^3.6.5",
     "cross-env": "^7.0.2",
     "docx": "^5.4.0",
