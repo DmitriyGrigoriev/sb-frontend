@@ -113,7 +113,7 @@ const routes = [
         meta: {
           requiresAuth: true
         }
-      },
+      }
       // {
       //   path: '/programs',
       //   name: 'programs',
