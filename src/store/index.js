@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 // store/modules
 import settings from './modules/settings'
-import components from './modules/components'
+// import components from './modules/components'
 
 import auth from '@/modules/auth/store'
 import users from '@/modules/users/store'
@@ -21,7 +21,7 @@ const Store = new Vuex.Store({
     auth,
     users,
     settings,
-    components,
+    // components,
     setup,
     measure
   },
