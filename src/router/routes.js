@@ -1,6 +1,6 @@
 import ProjectsRoutes from './projects'
 import DictionaryRoutes from './dictionary'
-import TestRoutes from './test'
+// import TestRoutes from './test'
 // import DashboardRoutes from './dashboard'
 
 const routes = [
