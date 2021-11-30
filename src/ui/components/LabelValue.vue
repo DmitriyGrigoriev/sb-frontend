@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import TextareaCopy from 'TextareaCopy'
+import TextareaCopy from './TextareaCopy'
 
 export default {
   name: 'LabelValue',
