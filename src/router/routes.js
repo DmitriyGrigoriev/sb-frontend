@@ -50,17 +50,17 @@ const routes = [
       //     requiresAuth: true
       //   }
       // },
-      {
-        path: 'notifications',
-        name: 'notifications',
-        component: () =>
-          import(
-            /* webpackChunkName: 'Notifications' */ '@/modules/notifications/pages/Notifications.vue'
-          ),
-        meta: {
-          requiresAuth: true
-        }
-      },
+      // {
+      //   path: 'notifications',
+      //   name: 'notifications',
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: 'Notifications' */ '@/modules/notifications/pages/Notifications.vue'
+      //     ),
+      //   meta: {
+      //     requiresAuth: true
+      //   }
+      // },
       {
         path: 'dashboard',
         name: 'dashboard',
@@ -114,18 +114,18 @@ const routes = [
           requiresAuth: true
         }
       },
-      {
-        path: '/programs',
-        name: 'programs',
-        component: () =>
-          import(
-            /* webpackChunkName: 'ProgramsIndex' */ '@/modules/programs/pages/ProgramsIndex.vue'
-          ),
-        meta: {
-          requiresAuth: true,
-          isEncoder: true
-        }
-      }
+      // {
+      //   path: '/programs',
+      //   name: 'programs',
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: 'ProgramsIndex' */ '@/modules/programs/pages/ProgramsIndex.vue'
+      //     ),
+      //   meta: {
+      //     requiresAuth: true,
+      //     isEncoder: true
+      //   }
+      // }
       // {
       //   path: 'programs/:id',
       //   name: 'review-activities',
