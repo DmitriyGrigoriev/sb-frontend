@@ -1,6 +1,6 @@
-import ProjectsRoutes from './projects'
+// import ProjectsRoutes from './projects'
 import DictionaryRoutes from './dictionary'
-import TestRoutes from './test'
+// import TestRoutes from './test'
 // import DashboardRoutes from './dashboard'
 
 const routes = [
@@ -20,15 +20,15 @@ const routes = [
     path: '/',
     component: () => import('@/ui/layouts/AppLayout.vue'),
     children: [
-      {
-        path: 'review',
-        name: 'review',
-        component: () =>
-          import(/* webpackChunkName: 'Review' */ '@/modules/projects/pages/Review.vue'),
-        meta: {
-          requiresAuth: true
-        }
-      },
+      // {
+      //   path: 'review',
+      //   name: 'review',
+      //   component: () =>
+      //     import(/* webpackChunkName: 'Review' */ '@/modules/projects/pages/Review.vue'),
+      //   meta: {
+      //     requiresAuth: true
+      //   }
+      // },
       {
         path: 'admin',
         name: 'admin',
@@ -165,23 +165,23 @@ const routes = [
     ]
   },
   // DashboardRoutes,
-  ProjectsRoutes,
+  // ProjectsRoutes,
   DictionaryRoutes,
-  TestRoutes,
-  {
-    path: '/shared',
-    component: () => import('@/ui/layouts/PublicLayout.vue'),
-    children: [
-      {
-        path: ':id',
-        name: 'shared-project',
-        component: () =>
-          import(
-            /* webpackChunkName: 'SharedProject' */ '@/modules/projects/pages/SharedProject.vue'
-          )
-      }
-    ]
-  },
+  // TestRoutes,
+  // {
+  //   path: '/shared',
+  //   component: () => import('@/ui/layouts/PublicLayout.vue'),
+  //   children: [
+  //     {
+  //       path: ':id',
+  //       name: 'shared-project',
+  //       component: () =>
+  //         import(
+  //           /* webpackChunkName: 'SharedProject' */ '@/modules/projects/pages/SharedProject.vue'
+  //         )
+  //     }
+  //   ]
+  // },
   {
     path: '',
     component: () => import('@/ui/layouts/AuthLayout.vue'),
