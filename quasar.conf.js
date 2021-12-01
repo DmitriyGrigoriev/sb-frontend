@@ -46,7 +46,7 @@ module.exports = function (ctx) {
           API: 'http://192.168.177.130:8000'
         }
         : { // and on build (production):
-          API: 'http://192.168.0.2:8000'
+          API: 'http://192.168.0.2:4000'
         },
       // extractCSS: false,
       extendWebpack(cfg) {
