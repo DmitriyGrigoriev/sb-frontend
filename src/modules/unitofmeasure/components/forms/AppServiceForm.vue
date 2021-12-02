@@ -126,7 +126,7 @@ export default {
       unit_price: null,
       price_date: null,
       external_service_code: null,
-      version: null,
+      version: 0,
       prices: []
     }
   },
