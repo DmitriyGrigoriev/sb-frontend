@@ -148,7 +148,7 @@ export function forgotPassword (f = {}, email) {
 }
 
 export function resendEmailVerification (f = {}, payload) {
-  Loading.show()
+  // Loading.show()
 
   return authService
     .resendEmailVerification(payload)

@@ -1,10 +1,9 @@
 <template>
   <div class="row q-pa-sm q-col-gutter-lg">
     <div class="col-lg-4 col-md-6 col-xs-12">
-      <span class="text-subtitle1 text-primary">Password</span>
+      <span class="text-subtitle1 text-primary">{{ $t('components.update_password.text.title') }}</span>
       <p class="text-caption">
-        Your password ensures secured access to your IPM System account and is
-        used to log in.
+        {{ $t('components.update_password.text.subtitle') }}
       </p>
     </div>
     <div class="col-lg-8 col-md-6 col-xs-12">
@@ -15,39 +14,39 @@
         greedy
       >
         <div>
-          <span class="text-weight-bold">Current Password</span>
+          <span class="text-weight-bold">{{ $t('components.update_password.current_pass.label') }}</span>
           <password-input
             v-model="old_password"
-            placeholder="Current Password"
-            :rules="[val => !!val || 'Current password is required']"
+            :placeholder="$t('components.update_password.current_pass.placeholder')"
+            :rules="[val => !!val || $t('components.update_password.current_pass.rules')]"
           ></password-input>
         </div>
 
         <div>
-          <span class="text-weight-bold">New Password</span>
+          <span class="text-weight-bold">{{ $t('components.update_password.new_pass.label') }}</span>
           <password-input
             v-model="password"
-            placeholder="New Password"
+            :placeholder="$t('components.update_password.new_pass.placeholder')"
             :rules="[
-              val => val.length >= 8 || 'Password must at least be 8 characters'
+              val => val.length >= 8 || $t('components.update_password.new_pass.rules')
             ]"
           ></password-input>
         </div>
 
         <div>
-          <span class="text-weight-bold">Confirm New Password</span>
+          <span class="text-weight-bold">{{ $t('components.update_password.confirm_pass.label') }}</span>
           <password-input
             v-model="password_confirmation"
-            placeholder="Confirm Password"
+            :placeholder="$t('components.update_password.confirm_pass.placeholder')"
             :rules="[
               val => !!val || '* Required',
-              val => val === password || 'Password does not match'
+              val => val === password || $t('components.update_password.confirm_pass.rules')
             ]"
           ></password-input>
         </div>
 
         <div>
-          <q-btn type="submit" label="Update" color="primary"></q-btn>
+          <q-btn type="submit" :label="$t('components.update_password.buttons.update.label')" color="primary"></q-btn>
         </div>
       </q-form>
     </div>
@@ -93,9 +92,8 @@ export default {
     updatePasswordDialog (payload) {
       this.$q
         .dialog({
-          title: 'Update Password',
-          message:
-            'Be sure to backup your new password and keep it in a safe place.',
+          title: this.$t('components.update_password.dialog.title'),
+          message: this.$t('components.update_password.dialog.message'),
           cancel: true,
           persistent: true
         })
@@ -112,7 +110,7 @@ export default {
                 // confirm sign out
                 this.$q.notify({
                   type: 'positive',
-                  message: 'Successfully updated password.',
+                  message: this.$t('components.update_password.dialog.success'),
                   position: 'bottom-right'
                 })
               }
