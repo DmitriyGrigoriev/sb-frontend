@@ -1,17 +1,15 @@
 <template>
   <div class="row q-pa-sm q-col-gutter-lg">
     <div class="col-lg-4 col-md-6 col-xs-12">
-      <span class="text-subtitle1 text-primary">Verify Email</span>
+      <span class="text-subtitle1 text-primary">{{ $t('components.verify_email.text.title') }}</span>
       <div class="text-caption">
-        Verify your email to secure your account. Your email will also be used
-        to retrieve your password. Also, your email will be used to receive
-        important updates from the System.
+        {{ $t('components.verify_email.text.subtitle') }}
       </div>
     </div>
 
     <div class="col-lg-8 col-md-6 col-xs-12">
       <q-btn
-        label="Resend Email"
+        :label="$t('components.verify_email.buttons.resend.label')"
         @click="verifyEmail"
         color="primary"
         v-if="!isVerified"
@@ -39,14 +37,14 @@ export default {
         email: this.user.email
       }
 
-      this.$q.loading.show('Resending email...')
+      this.$q.loading.show({ message: this.$t('components.verify_email.text.message') })
 
       this.$store
-        .dispatch('security/resendEmailVerification', payload)
+        .dispatch('auth/resendEmailVerification', payload)
         .then(() =>
           this.$q.notify({
             type: 'positive',
-            message: 'Please check your email',
+            message: this.$t('components.verify_email.notify.message'),
             position: 'bottom-right'
           })
         )

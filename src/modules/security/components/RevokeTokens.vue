@@ -1,18 +1,15 @@
 <template>
   <div class="row q-pa-sm q-col-gutter-lg">
     <div class="col-lg-4 col-md-6 col-xs-12">
-      <span class="text-subtitle1 text-primary">Logout All Devices</span>
+      <span class="text-subtitle1 text-primary">{{ $t('components.revoke_tokens.text.title') }}</span>
       <div class="text-caption">
-        This app does not log out automatically. If you have not logged out
-        previously logged in devices, chances are they are still logged in. You
-        may log them out by clicking this button. Note: This device will also be
-        logged out.
+        {{ $t('components.revoke_tokens.text.subtitle') }}
       </div>
     </div>
 
     <div class="col-lg-8 col-md-6 col-xs-12">
       <q-btn
-        label="Logout"
+        :label="$t('components.revoke_tokens.buttons.logout.label')"
         @click="confirmRevokeAllTokens"
         color="negative"
         outline
@@ -22,10 +19,8 @@
 </template>
 
 <script>
-// import { client } from 'boot/apollo'
-// import gql from 'graphql-tag'
 import { storageService } from '@/services/storage.service'
-// import { Loading, LocalStorage } from 'quasar'
+import { handleError } from '@/utils'
 
 export default {
   name: 'RevokeTokens',
@@ -33,8 +28,8 @@ export default {
     confirmRevokeAllTokens () {
       this.$q
         .dialog({
-          title: 'Confirm',
-          message: 'Are you sure you want to log out all devices?',
+          title: this.$t('components.revoke_tokens.dialog.title'),
+          message: this.$t('components.revoke_tokens.dialog.message'),
           cancel: true,
           transitionShow: 'fadeIn',
           transitionHide: 'fadeOut'
@@ -43,24 +38,14 @@ export default {
     },
     revokeAllTokens () {
       // remove token
-      storageService.removeToken()
-    //   Loading.show()
-    //   client
-    //     .mutate({
-    //       mutation: gql`
-    //         mutation revokeAllTokens {
-    //           revokeAllTokens
-    //         }
-    //       `,
-    //       variables: {}
-    //     })
-    //     .then(() => {
-    //       LocalStorage.clear()
-    //     })
-    //     .then(() => {
-    //       this.$router.replace('/login')
-    //     })
-    //     .finally(() => Loading.hide())
+      try {
+        storageService.removeToken()
+        storageService.removeRefreshToken()
+        storageService.clear()
+        this.$router.replace('/login')
+      } catch (error) {
+        handleError(error)
+      }
     }
   }
 }

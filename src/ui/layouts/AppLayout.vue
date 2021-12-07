@@ -1,10 +1,9 @@
 <template>
   <q-layout view="lHr LpR lfr">
-    <q-header bordered>
-<!--      <app-header></app-header>-->
-
+<!--    <q-header elevated class="bg-black">-->
+<!--      <app-header @click="toggleDrawer"/>-->
 <!--      <q-separator color="secondary" class="header-separator" />-->
-    </q-header>
+<!--    </q-header>-->
 
     <q-drawer
       v-model="drawer"
@@ -44,7 +43,9 @@
       <app-footer></app-footer>
     </q-footer>
 
-    <q-page-container>
+    <q-page-container
+      @page-container-menu="toggleDrawer"
+    >
       <router-view />
     </q-page-container>
   </q-layout>
@@ -52,7 +53,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-// import AppHeader from '@/ui/components/Header'
+// import AppHeader from '@/ui/components/AppHeader'
 import AppFooter from '@/ui/components/Footer'
 import AppMenu from '@/ui/components/Menu'
 import UserInfo from '@/ui/components/UserInfo'
@@ -79,34 +80,7 @@ export default {
       appTitleFooter: process.env.APP_NAME,
       copyright: process.env.COPYRIGHT,
       showAbout: false,
-      errors: null,
-      tabs: [
-        {
-          label: 'Dashboard',
-          icon: 'dashboard',
-          to: '/dashboard'
-        },
-        {
-          label: 'Add Project',
-          icon: 'add_box',
-          to: '/projects/add'
-        },
-        {
-          label: 'Projects',
-          icon: 'view_list',
-          to: '/projects'
-        },
-        {
-          label: 'Profile',
-          icon: 'tune',
-          to: '/profile'
-        },
-        {
-          label: 'Settings',
-          icon: 'settings',
-          to: '/settings'
-        }
-      ]
+      errors: null
     }
   },
   computed: {
@@ -114,22 +88,10 @@ export default {
     ...mapState('settings', ['dark']),
     darkMode () {
       return this.$q.dark.isActive
-    },
-    filteredTabs () {
-      // This function hides the users tab if the user is not admin or superadmin
-      let filteredTabs = []
-
-      if (this.isEncoder) {
-        return this.tabs
-      }
-
-      filteredTabs = this.tabs.filter(tab => tab.label !== 'Add Project')
-
-      return filteredTabs
-    },
-    mini () {
-      return this.$q.screen.sm
     }
+    // mini () {
+    //   return this.$q.screen.sm
+    // }
   },
   created () {
     this.errors = {}
@@ -146,30 +108,38 @@ export default {
         // intended for switching drawer to "normal" mode only
         e.stopPropagation()
       }
+    },
+    /**
+     * Sets the sidebar expansion state to mini
+     */
+    collapseDrawer () {
+      this.drawer = false
+    },
+    /**
+     * Sets the sidebar expansion state to expanded
+     */
+    expandDrawer () {
+      if (this.miniState) {
+        this.miniState = false
+      }
+      this.drawer = true
+    },
+    /**
+     * Toggles the sidebar expansion state
+     */
+    toggleDrawer () {
+      if (this.drawer) {
+        this.collapseDrawer()
+      } else {
+        this.expandDrawer()
+      }
     }
+  },
+  mounted () {
+    this.$bus.$on('page-title-menu', () => {
+      this.toggleDrawer()
+    })
   }
-  // apollo: {
-  //   processing_statuses: {
-  //     query: gql`
-  //       query {
-  //         processing_statuses {
-  //           id
-  //           name
-  //           count_projects
-  //         }
-  //       }
-  //     `,
-  //     variables: {},
-  //     result({ data }) {
-  //       this.tabs.map(tab => {
-  //         if (tab.label === 'Projects') {
-  //           tab.children = data.processing_statuses;
-  //         }
-  //         return tab
-  //       })
-  //     }
-  //   }
-  // }
 }
 </script>
 
