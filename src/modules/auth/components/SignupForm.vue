@@ -4,76 +4,41 @@
       enter-active-class="animated zoomIn"
       leave-active-class="animated zoomOut"
     >
-      <q-banner
-        inline-actions
-        dense
-        rounded
-        class="bg-red text-white"
-        v-if="error"
-      >
-        {{ error.message }}
-
-        <template v-slot:action>
-          <q-btn
-            flat
-            round
-            icon="close"
-            @click="CLEAR_ERROR"
-            v-test="{ id: 'clearError' }"
-          />
-        </template>
-      </q-banner>
+      <error-banner :error="this.error"/>
     </transition>
 
     <q-input
       outlined
       :placeholder="$t('auth.register.name')"
-      v-model="name"
+      v-model="nickname"
       :rules="required"
       :dense="dense"
       hide-bottom-space
-      v-test="{ id: 'name' }"
+      v-test="{ id: 'nickname' }"
       dark
+      :error="hasErrors('nickname')"
+      :error-message="getError('nickname')"
     >
       <template v-slot:prepend>
         <q-icon name="alternate_email"></q-icon>
       </template>
     </q-input>
-
-    <q-input
-      outlined
-      v-model="username"
-      :dense="dense"
-      :loading="checkingEmail"
-      :placeholder="$t('auth.login.email')"
-      @input="checkEmail"
-      :rules="emailRule"
-      hide-bottom-space
-      v-test="{ id: 'username' }"
+    <email-input
+      v-model="email"
       dark
+      :error="hasErrors('email')"
+      :error-message="getError('email')"
     >
-      <template v-slot:prepend>
-        <q-icon name="email" />
-      </template>
-      <template v-slot:append>
-        <q-icon
-          :name="emailAvailable ? 'done_outline' : 'cancel'"
-          :color="emailAvailable ? 'primary' : 'negative'"
-          v-show="username && !checkingEmail"
-        />
-      </template>
-    </q-input>
-
+    </email-input>
     <password-input
-      :placeholder="$t('auth.login.password')"
       v-model="password"
-      :rules="passwordRule"
       v-test="{ id: 'password' }"
       dark
+      :error="hasErrors('password')"
+      :error-message="getError('password')"
     />
-
     <password-input
-      :placeholder="$t('auth.login.repeat_password')"
+      :placeholder="$t('auth.register.repeat_password')"
       v-model="passwordConfirmation"
       :rules="match"
       v-test="{ id: 'passwordConfirmation' }"
@@ -96,70 +61,66 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { Dialog } from 'quasar'
+import { mapGetters, mapState } from 'vuex'
+import ErrorBanner from './ErrorBanner'
 import PasswordInput from '@/ui/form-inputs/PasswordInput'
-import { validateEmail } from '@/utils'
+import ValidationResponseHandler from '@/mixins/ResponseValidation'
+import EmailInput from '@/ui/form-inputs/EmailInput'
 
 export default {
   name: 'SignupForm',
-  components: { PasswordInput },
+  mixins: [ValidationResponseHandler],
+  components: { EmailInput, ErrorBanner, PasswordInput },
   data () {
     return {
-      name: null,
-      username: null,
+      nickname: null,
+      email: null,
       password: null,
       passwordConfirmation: null,
-      required: [val => !!val || '* Required'],
-      emailRule: [
-        val => !!val || '* Required',
-        val => this.validEmail(val) || 'Please input valid email.'
-      ],
-      passwordRule: [
-        val => !!val || '* Required',
-        val => val.length >= 8 || 'Password must at least be 8 characters.'
-      ],
+      required: [val => !!val || this.$t('rules.required')],
       match: [
-        val => !!val || '* Required',
-        val => this.passwordMatch(val) || 'Password does not match'
-      ],
-      checkingEmail: false,
-      emailAvailable: false
+        val => !!val || this.$t('rules.required'),
+        val => this.passwordMatch(val) || this.$t('auth.errors.password_match')
+      ]
     }
   },
   computed: {
     ...mapState('settings', ['dense', 'dark']),
-    ...mapState('auth', ['error', 'loading'])
+    ...mapState('auth', ['loading']),
+    ...mapGetters('auth', ['error'])
   },
   methods: {
-    ...mapActions('auth', ['checkEmailAvailability', 'register']),
-    ...mapMutations('auth', ['CLEAR_ERROR']),
     passwordMatch (val) {
       return val === this.password
     },
-    validEmail (email) {
-      return validateEmail(email)
-    },
-    checkEmail () {
-      const { username } = this.$data
-      if (this.validEmail(username)) {
-        this.checkingEmail = true
-        this.checkEmailAvailability(username).then(res => {
-          this.emailAvailable = !!res
-          this.checkingEmail = false
-        })
-      }
-    },
     handleSubmit () {
-      const { name, username, password, passwordConfirmation } = this.$data
+      const { nickname, email, password, passwordConfirmation } = this.$data
 
       this.$refs.signupForm.validate().then(success => {
         if (success) {
-          this.register({
-            name: name,
-            email: username,
-            password: password,
-            passwordConfirmation: passwordConfirmation
-          })
+          this.$store
+            .dispatch('auth/register', {
+              nickname: nickname,
+              email: email,
+              password: password,
+              re_password: passwordConfirmation
+            })
+            .then(res => {
+              Dialog.create({
+                title: this.$t('auth.register.register_success'),
+                message: this.$t('auth.register.account_created'),
+                persistent: true,
+                ok: true
+              })
+              this.$emit('gotab', 'login')
+            })
+            .catch(error => {
+              this.responseError(error)
+            })
+            .finally(() => {
+              this.$q.loading.hide()
+            })
         }
       })
     }

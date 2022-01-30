@@ -1,4 +1,4 @@
-// import ProjectsRoutes from './projects'
+import AuthRoutes from './auth'
 import DictionaryRoutes from './dictionary'
 // import TestRoutes from './test'
 // import DashboardRoutes from './dashboard'
@@ -165,7 +165,7 @@ const routes = [
     ]
   },
   // DashboardRoutes,
-  // ProjectsRoutes,
+  AuthRoutes,
   DictionaryRoutes,
   // TestRoutes,
   // {
@@ -182,37 +182,6 @@ const routes = [
   //     }
   //   ]
   // },
-  {
-    path: '',
-    component: () => import('@/ui/layouts/AuthLayout.vue'),
-    children: [
-      {
-        path: '/login',
-        name: 'login',
-        component: () =>
-          import(/* webpackChunkName: 'LoginPage' */ '@/modules/auth/pages/Login.vue'),
-        meta: {
-          guest: true
-        }
-      },
-      {
-        path: '/email-verify',
-        name: 'email-verify',
-        component: () =>
-          import(
-            /* webpackChunkName: 'EmailVerify' */ '@/modules/auth/pages/EmailVerify.vue'
-          )
-      },
-      {
-        path: '/password/reset/:token',
-        name: 'reset-password',
-        component: () =>
-          import(
-            /* webpackChunkName: 'ResetPassword' */ '@/modules/auth/pages/ResetPassword.vue'
-          )
-      }
-    ]
-  },
   // {
   //   path: '/upload',
   //   component: () => import('@/ui/layouts/AppLayout.vue'),

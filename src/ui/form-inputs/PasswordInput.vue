@@ -1,9 +1,10 @@
 <template>
   <q-input
+    v-model="model"
+    v-test="{ id: 'password' }"
     outlined
     :placeholder="$t('auth.login.password')"
     :type="!passwordVisibility ? 'password' : 'text'"
-    v-model="model"
     :rules="rules"
     :label="label"
     stack-label
@@ -11,6 +12,8 @@
     hide-bottom-space
     :dark="dark"
     autocomplete
+    :error="error"
+    :error-message="errorMessage"
   >
     <template v-slot:prepend>
       <q-icon name="vpn_key"></q-icon>
@@ -27,6 +30,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { AUTH_FIELD } from '@/constants/auth.js'
 
 export default {
   props: {
@@ -51,12 +55,23 @@ export default {
       type: Array,
       required: false,
       default () {
-        return []
+        return [
+          val => !!val || this.$t('rules.required'),
+          val => val.length >= AUTH_FIELD.passwordLength || this.$t('auth.password.errors.password_length', { length: AUTH_FIELD.passwordLength })
+        ]
       }
     },
     dark: {
       type: Boolean,
       default: false
+    },
+    error: {
+      type: Boolean,
+      default: false
+    },
+    errorMessage: {
+      type: String,
+      default: ''
     }
   },
   computed: {

@@ -107,7 +107,7 @@ export default {
       icon: 'fa-check-circle',
       position: 'bottom-right',
       color: 'grey-8',
-      timeout: '2500'
+      timeout: '5000'
     }
   },
   paths: {
@@ -148,7 +148,7 @@ export default {
     },
     labels: {
       email: 'Почта',
-      name: 'Имя пользователя',
+      name: 'Псевдоним',
       password: 'Пароль',
       remember_me: 'Запомнить меня',
       repeat_password: 'Повторите пароль'
@@ -188,6 +188,7 @@ export default {
     },
     register: {
       register: 'Регистрация',
+      register_success: 'Регистрация прошла успешно',
       invalid_data:
         'Server could not process the request. Please correct the sent data.',
       already_registered:
@@ -195,7 +196,7 @@ export default {
       no_account:
         'Нет аккаунта?',
       account_created:
-        'Пожалуйста, проверьте свою электронную почту, вым выслана ссылка для подтверждения регистрации. ' +
+        'Пожалуйста, проверьте свою электронную почту, вам выслана ссылка для подтверждения регистрации. ' +
         'Этот процесс может занять до 10 минут. ' +
         'Пожалуйста, проверьте папку со спамом, если письмо не было получено.',
       email: '@:auth.labels.email',
@@ -211,6 +212,12 @@ export default {
       check_email:
         'You want to register with the email address {email}, is this correct?'
     },
+    activation: {
+      activation_message: 'Активация учетной записи...',
+      activation_success: 'Поздравляем, активация вашей учетной записи прошла успешно!',
+      activation_failed: 'Ваша учетная запись не прошла проверку :(',
+      activation_reason: 'Причина: '
+    },
     verification: {
       verification_success: 'Your e-mail has been verified. You can now login.',
       verification_failed: 'Verification has failed.'
@@ -223,17 +230,24 @@ export default {
     },
     password: {
       forgot: {
-        header: 'Восстановление пароля',
-        check_email: 'Please check your email to reset your password.',
-        email: 'Укажите ваш email для восстановления доступа',
-        submit: 'Восстановить мой пароль'
+        header: 'Восстановление доступа',
+        check_email: 'Пожалуйста, проверьте свою электронную почту, на неё выслана инструкция для восстановления пароля.',
+        email: 'Укажите ваш Псевдоним для восстановления доступа',
+        submit: 'Восстановить доступ'
+      },
+      set_password: {
+        success:
+          'Ваш пароль был изменен. Теперь вы можете войти в систему с новым паролем.'
       },
       reset: {
-        header: 'Reset your password',
+        header: 'Сброс пароля',
         success:
-          'Your password has been reset. You can now login with the new password.'
+          'Ваш пароль был сброшен. Теперь вы можете войти в систему с новым паролем.',
+        enter: 'Изменить пароль',
+        remembered: 'Вспомнили свой пароль?'
       },
       errors: {
+        email_not_registered: 'Пользователь с таким email не зарегистрирован.',
         password_length: '@:auth.errors.password_length',
         password_match: '@:auth.errors.password_match',
         required_field: 'Обязательное поле.'
@@ -291,6 +305,10 @@ export default {
         message: 'Превышено время ожидания ответа от сервера.'
 
       },
+      unknown_error: {
+        status: '5100',
+        message: 'Произошла неизвестная ошибка.'
+      },
       internal_server_error: {
         status: '500',
         message: 'Сервер не может обработать запрос, пожалуйста повторите попытку позднее.'
@@ -321,6 +339,7 @@ export default {
       label: 'О программе'
     },
     revoke_tokens: {
+      // modules.security.components.RevokeTokens
       dialog: {
         title: 'Подтвердите',
         message: 'Вы уверены, что хотите выйти из системы ?'
@@ -339,6 +358,7 @@ export default {
       }
     },
     verify_email: {
+      // modules.security.components.VerifyEmail
       text: {
         title: 'Проверка почты',
         subtitle: 'Пожалуйста подтвердите адрес электронной почты, чтобы защитить ' +
@@ -363,29 +383,33 @@ export default {
       },
       current_pass: {
         label: 'Текущий пароль',
-        placeholder: 'Введите текущий пароль',
-        rules: 'Требуется ввести пароль'
+        placeholder: 'Введите текущий пароль'
       },
       new_pass: {
         label: 'Новый пароль',
-        placeholder: 'Введите новый пароль',
-        rules: 'Пароль должен состоять не менее чем из 8 символов'
+        placeholder: 'Введите новый пароль'
       },
       confirm_pass: {
         label: 'Подтверждение пароля',
-        placeholder: 'Подтвердите новый пароль',
-        rules: 'Пароли не совпадают'
+        placeholder: 'Подтвердите новый пароль'
+        // rules: 'Пароли не совпадают'
       },
       buttons: {
         update: {
-          label: 'Обновить'
+          label: 'Изменить'
         }
       },
       dialog: {
         title: 'Внимание',
         message: 'Обязательно создайте резервную копию своего нового ' +
-          'пароля и храните его в надежном месте.',
-        success: 'Пароль успешно обновлён.'
+          'пароля и храните его в надежном месте.'
+      }
+    },
+    menu: {
+      // ui.components.menu
+      dialog: {
+        title: 'Подтвердите',
+        message: 'Вы уверены, что хотите выйти из системы?'
       }
     }
   },

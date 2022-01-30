@@ -1,5 +1,5 @@
 <template>
-  <q-form ref="loginForm" class="q-gutter-md" @submit="handleSubmit" greedy>
+  <q-form ref="passwordReset" class="q-gutter-md" @submit="updateForgottenPassword" greedy>
     <transition
       enter-active-class="animated zoomIn"
       leave-active-class="animated zoomOut"
@@ -7,14 +7,40 @@
       <error-banner :error="this.error"/>
     </transition>
 
+<!--    <q-input-->
+<!--      outlined-->
+<!--      :placeholder="$t('auth.register.name')"-->
+<!--      v-model="nickname"-->
+<!--      :rules="required"-->
+<!--      hide-bottom-space-->
+<!--      v-test="{ id: 'nickname' }"-->
+<!--      dark-->
+<!--      :error="hasErrors('nickname')"-->
+<!--      :error-message="getError('nickname')"-->
+<!--    >-->
+<!--      <template v-slot:prepend>-->
+<!--        <q-icon name="alternate_email"></q-icon>-->
+<!--      </template>-->
+<!--    </q-input>-->
     <email-input
       v-model="username"
       dark
-    ></email-input>
-
+      :error="hasErrors('username')"
+      :error-message="getError('username')"
+    >
+    </email-input>
     <password-input
       v-model="password"
-      :rules="required"
+      v-test="{ id: 'password' }"
+      dark
+      :error="hasErrors('password')"
+      :error-message="getError('password')"
+    />
+    <password-input
+      :placeholder="$t('auth.register.repeat_password')"
+      v-model="passwordConfirmation"
+      :rules="match"
+      v-test="{ id: 'passwordConfirmation' }"
       dark
     ></password-input>
 
@@ -27,7 +53,7 @@
         :loading="loading"
         v-test="{ id: 'login' }"
       >
-        {{ $t('auth.login.enter')}}
+        {{ $t('auth.password.reset.enter') }}
       </q-btn>
     </div>
   </q-form>
@@ -40,15 +66,23 @@ import ErrorBanner from './ErrorBanner'
 import PasswordInput from '@/ui/form-inputs/PasswordInput'
 import EmailInput from '@/ui/form-inputs/EmailInput'
 import { handleError } from '@/utils'
+import ValidationResponseHandler from '@/mixins/ResponseValidation'
 
 export default {
-  name: 'LoginForm',
+  name: 'ResetForm',
   components: { ErrorBanner, EmailInput, PasswordInput },
+  mixins: [ValidationResponseHandler],
   data () {
     return {
-      username: 'tnvedru@gmail.com',
-      password: 'MyAwessomePassword124',
-      required: [val => !!val || this.$t('rules.required')]
+      nickname: '',
+      username: '',
+      password: '',
+      passwordConfirmation: null,
+      required: [val => !!val || this.$t('rules.required')],
+      match: [
+        val => !!val || this.$t('rules.required'),
+        val => this.passwordMatch(val) || this.$t('auth.errors.password_match')
+      ]
     }
   },
   computed: {
@@ -64,7 +98,7 @@ export default {
     }
   },
   methods: {
-    handleSubmit () {
+    updateForgottenPassword () {
       // validate the form before calling login method
       this.$refs.loginForm.validate().then(success => {
         if (success) {
@@ -89,3 +123,7 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+</style>

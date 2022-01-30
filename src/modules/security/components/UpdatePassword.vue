@@ -16,32 +16,32 @@
         <div>
           <span class="text-weight-bold">{{ $t('components.update_password.current_pass.label') }}</span>
           <password-input
-            v-model="old_password"
-            :placeholder="$t('components.update_password.current_pass.placeholder')"
-            :rules="[val => !!val || $t('components.update_password.current_pass.rules')]"
+            v-model="current_password"
+            :error="hasErrors('current_password')"
+            :error-message="getError('current_password')"
           ></password-input>
         </div>
 
         <div>
           <span class="text-weight-bold">{{ $t('components.update_password.new_pass.label') }}</span>
           <password-input
-            v-model="password"
-            :placeholder="$t('components.update_password.new_pass.placeholder')"
-            :rules="[
-              val => val.length >= 8 || $t('components.update_password.new_pass.rules')
-            ]"
+            v-model="new_password"
+            :error="hasErrors('new_password')"
+            :error-message="getError('new_password')"
           ></password-input>
         </div>
 
         <div>
           <span class="text-weight-bold">{{ $t('components.update_password.confirm_pass.label') }}</span>
           <password-input
-            v-model="password_confirmation"
+            v-model="re_new_password"
             :placeholder="$t('components.update_password.confirm_pass.placeholder')"
             :rules="[
-              val => !!val || '* Required',
-              val => val === password || $t('components.update_password.confirm_pass.rules')
+              val => !!val || this.$t('rules.required'),
+              val => val === new_password || $t('auth.errors.password_match')
             ]"
+            :error="hasErrors('re_new_password')"
+            :error-message="getError('re_new_password')"
           ></password-input>
         </div>
 
@@ -55,18 +55,20 @@
 
 <script>
 import PasswordInput from '@/ui/form-inputs/PasswordInput'
+import ValidationResponseHandler from '@/mixins/ResponseValidation'
+import { showSuccessNotification } from '@/functions/function-show-notifications'
+
 /* eslint-disable camelcase */
 export default {
   components: { PasswordInput },
-
   name: 'UpdatePassword',
-
+  mixins: [ValidationResponseHandler],
   data () {
     return {
       showPassword: false,
-      old_password: '',
-      password: '',
-      password_confirmation: ''
+      current_password: '',
+      new_password: '',
+      re_new_password: ''
     }
   },
 
@@ -74,14 +76,12 @@ export default {
     handleSubmit () {
       this.$refs.changePasswordForm.validate().then(success => {
         if (success) {
-          const { password, old_password, password_confirmation } = this.$data
-
+          const { new_password, current_password, re_new_password } = this.$data
           const payload = {
-            old_password: old_password,
-            password: password,
-            password_confirmation: password_confirmation
+            current_password: current_password,
+            new_password: new_password,
+            re_new_password: re_new_password
           }
-
           this.updatePasswordDialog(payload)
         } else {
 
@@ -99,31 +99,24 @@ export default {
         })
         .onOk(() => {
           this.$q.loading.show()
-          this.$store
-            .dispatch('security/updatePassword', payload)
+          this.$store.dispatch('auth/updatePassword', payload)
             .then(res => {
-              // check if successfully changed password
-              if (
-                res.updatePassword &&
-                res.updatePassword.status === 'PASSWORD_UPDATED'
-              ) {
-                // confirm sign out
-                this.$q.notify({
-                  type: 'positive',
-                  message: this.$t('components.update_password.dialog.success'),
-                  position: 'bottom-right'
-                })
-              }
+              showSuccessNotification(this.$t('auth.password.set_password.success'))
             })
-            .catch(err => {
-              this.$q.notify({
-                type: 'negative',
-                message: err.message,
-                position: 'bottom-right'
-              })
+            .catch(error => {
+              this.responseError(error)
             })
-            .finally(() => this.$q.loading.hide())
+            .finally(() => {
+              this.$q.loading.hide()
+            })
+          this.reset()
         })
+    },
+
+    reset () {
+      this.current_password = ''
+      this.new_password = ''
+      this.re_new_password = ''
     }
   }
 }

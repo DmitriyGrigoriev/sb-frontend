@@ -18,7 +18,6 @@
 
       <q-scroll-area style="height: calc(100% - 200px); margin-top: 200px; border-right: 1px solid #ddd">
         <app-menu/>
-<!--        <app-menu :user="getCurrentUser" />-->
       </q-scroll-area>
 
       <user-info v-if="!miniState"></user-info>

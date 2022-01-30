@@ -12,9 +12,9 @@ export function CLEAR_ERROR (state) {
   state.error = null
 }
 
-export function SET_ERROR_MESSAGE (state, payload) {
-  state.errorMessage = payload
-}
+// export function SET_ERROR_MESSAGE (state, payload) {
+//   state.errorMessage = payload
+// }
 
 export function SET_USER (state, payload) {
   state.user = payload

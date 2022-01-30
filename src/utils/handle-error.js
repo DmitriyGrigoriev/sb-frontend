@@ -6,7 +6,7 @@ import {
   showErrorNotification
 } from '@/functions/function-show-notifications'
 import {
-  showRestQLErrorMessage,
+  // showRestQLErrorMessage,
   showCustomErrorMessage
 } from '@/functions/function-rest-error-messages'
 
@@ -38,18 +38,16 @@ export class HandleErrorClass {
   constructor (error) {
     // store original error
     this.error = null
-
     if (typeof error.response !== 'undefined') {
       this.status = error.response.status
-    } else {
-      if (typeof error.code !== 'undefined' && error.code === 'ECONNABORTED') {
-        this.error = new CustomError(4000, error.message)
-      } else {
-        if (error.message !== 'Network Error') {
-          this.error = new CustomError(5000, error.message)
-        }
-      }
+    } else if (typeof error.code !== 'undefined' && error.code === 'ECONNABORTED') {
+      this.error = new CustomError(4000, error.message)
+    } else if (error.message === 'Network Error') {
+      this.error = new CustomError(4100, $t('responses.errors.network_error.message'))
+    } else if (error.message !== 'Network Error') {
+      this.error = new CustomError(5000, error.message)
     }
+
     // if don't CustomError
     if (this.error === null) {
       this.error = error
@@ -72,6 +70,9 @@ export class HandleErrorClass {
       return Promise.resolve()
     }
     switch (this.status) {
+      case 400:
+        showErrorNotification(this.message)
+        break
       case 401:
         if (this._hasOwnProperty(this.error.response.data, 'code')) {
           if (this.error.response.data.code === 'token_not_valid') {
@@ -94,17 +95,33 @@ export class HandleErrorClass {
       case 4000:
         showErrorNotification(this.message)
         return Promise.resolve()
+      case 4100:
+        showErrorNotification(this.message)
+        return Promise.resolve()
       case 5000:
         this.error.printError()
         return Promise.resolve()
       default:
-        this.networkError()
-        break
+        this.defaultError()
+        return Promise.resolve()
     }
   }
 
   errorMessage () {
     switch (this.status) {
+      case 400:
+        if (this._hasOwnProperty(this.error.response, 'data')) {
+          if (typeof this.error.response.data === 'object') {
+            this.message = this.error.response.data[Object.keys(this.error.response.data)[0]]
+          } else {
+            this.message = this.error.response.data[0]
+          }
+        } else if (this._hasOwnProperty(this.error, 'message')) {
+          this.message = this.error.message
+        } else {
+          this.message = $t('responses.errors.unknown_error.message')
+        }
+        break
       case 401:
         if (this._hasOwnProperty(this.error.response.data, 'code')) {
         } else {
@@ -112,7 +129,7 @@ export class HandleErrorClass {
         }
         break
       case 403:
-        if (this._hasOwnProperty.call(this.error.response.data, 'detail')) {
+        if (this._hasOwnProperty(this.error.response.data, 'detail')) {
           this.message = this.error.response.data.detail
         } else {
           this.message = $t('auth.login.verification_required')
@@ -137,15 +154,20 @@ export class HandleErrorClass {
       case 4000:
         this.message = $t('responses.errors.service_timeout.message')
         break
+      case 4100:
+        this.message = $t('responses.errors.network_error.message')
+        break
       case 5000:
         this.message = this.error.message
         showCustomErrorMessage(this.error)
         break
       default:
-        if (typeof this.error.response !== 'undefined' && typeof this.error.response.status !== 'undefined' && this.error.response.status >= 500) {
+        if (typeof this.error.response !== 'undefined' &&
+          typeof this.error.response.status !== 'undefined' &&
+          this.error.response.status >= 500) {
           this.message = $t('responses.errors.internal_server_error.message')
         } else {
-          this.message = $t('responses.errors.network_error.message')
+          this.message = $t('responses.errors.unknown_error.message')
         }
         break
     }
@@ -173,18 +195,18 @@ export class HandleErrorClass {
     })
   }
 
-  networkError () {
-    // this.store.dispatch('auth/signoutUser')
-    const Store = this.store
-    return new Promise((resolve, reject) => {
-      Store.dispatch('auth/signoutUser')
-        .then(() => {
-          resolve()
-        })
-        .catch((err) => {
-          reject(err)
-        })
-    })
+  defaultError () {
+    showErrorNotification(this.message)
+    // const Store = this.store
+    // return new Promise((resolve, reject) => {
+    //   Store.dispatch('auth/signoutUser')
+    //     .then(() => {
+    //       resolve()
+    //     })
+    //     .catch((err) => {
+    //       reject(err)
+    //     })
+    // })
   }
 }
 
@@ -214,83 +236,83 @@ export const handleError = error => {
 //   return Promise.resolve(alert(error.message))
 // }
 
-handleError.message = function (error, showError) {
-  // Setup Error Message
-  let message = $t('responses.errors.network_error.message')
-  if (error.message === 'Network Error') {
-    store.dispatch('auth/signoutUser')
-  }
-  if (typeof error.response !== 'undefined') {
-    /* Processing: authorization response error 401
-       - check expired token or not
-    */
-    if (error.response.status === 401) {
-      if (Object.prototype.hasOwnProperty.call(error.response.data, 'code')) {
-        if (error.response.data.code === 'token_not_valid') {
-          store.dispatch('auth/clearStore')
-          // store.dispatch('auth/signoutUser')
-          // const asyncfn = () => {
-          //   return new Promise((resolve, reject) => {
-          //     setTimeout(() => {
-          //       resolve(Router.push({ name: 'home' }))
-          //     }, 1000)
-          //   })
-          // }
-          // const routePush = async () => {
-          //   await asyncfn()
-          // }
-          // routePush()
-          setTimeout(() => {
-            Router.push({ name: 'home' })
-          }, 1000)
-        }
-      } else {
-        /* invalid credentials: login, password or unactivated email */
-        message = $t('auth.login.invalid_credentials')
-        Router.push({ name: 'login' })
-        // setTimeout(() => {
-        //   Router.push({ name: 'login' })
-        // }, 1000)
-      }
-    } else if (error.response.status === 403) {
-      if (Object.prototype.hasOwnProperty.call(error.response.data, 'detail')) {
-        message = error.response.data.detail
-      } else { message = $t('auth.login.verification_required') }
-    } else if (error.response.status === 404) {
-      return Router.replace({ name: 'error' })
-      // message = 'API Route is Missing or Undefined'
-    } else if (error.response.status === 405) {
-      message = 'API Route Method Not Allowed'
-    } else if (error.response.status === 409) {
-      message = $t('responses.errors.conflict.message')
-    } else if (error.response.status === 400) {
-      // Validation Message
-      showRestQLErrorMessage(error)
-      showError = null
-      // message = 'В запросе к серверу используется неверный параметр или его значение.'
-    } else if (error.response.status === 550) {
-      // showError = null
-      // return EventBus.$emit('protected-error', error)
-    } else if (error.response.status >= 500) {
-      message = $t('responses.errors.internal_server_error.message')
-    }
-    // Try to Use the Response Message
-    if (Object.prototype.hasOwnProperty.call(error, 'response') &&
-      Object.prototype.hasOwnProperty.call(error.response, 'data')) {
-      if (Object.prototype.hasOwnProperty.call(error.response.data, 'message') &&
-        error.response.data.message.length > 0) {
-        message = error.response.data.message
-      }
-    }
-  } else {
-    if (error.message !== 'Network Error') {
-      const customError = new CustomError(5000, error.message)
-      customError.printError()
-      return showCustomErrorMessage(customError)
-    }
-  }
-  if (showError) {
-    showErrorNotification(message)
-  }
-  return message
-}
+// handleError.message = function (error, showError) {
+//   // Setup Error Message
+//   let message = $t('responses.errors.network_error.message')
+//   if (error.message === 'Network Error') {
+//     store.dispatch('auth/signoutUser')
+//   }
+//   if (typeof error.response !== 'undefined') {
+//     /* Processing: authorization response error 401
+//        - check expired token or not
+//     */
+//     if (error.response.status === 401) {
+//       if (Object.prototype.hasOwnProperty.call(error.response.data, 'code')) {
+//         if (error.response.data.code === 'token_not_valid') {
+//           store.dispatch('auth/clearStore')
+//           // store.dispatch('auth/signoutUser')
+//           // const asyncfn = () => {
+//           //   return new Promise((resolve, reject) => {
+//           //     setTimeout(() => {
+//           //       resolve(Router.push({ name: 'home' }))
+//           //     }, 1000)
+//           //   })
+//           // }
+//           // const routePush = async () => {
+//           //   await asyncfn()
+//           // }
+//           // routePush()
+//           setTimeout(() => {
+//             Router.push({ name: 'home' })
+//           }, 1000)
+//         }
+//       } else {
+//         /* invalid credentials: login, password or unactivated email */
+//         message = $t('auth.login.invalid_credentials')
+//         Router.push({ name: 'login' })
+//         // setTimeout(() => {
+//         //   Router.push({ name: 'login' })
+//         // }, 1000)
+//       }
+//     } else if (error.response.status === 403) {
+//       if (Object.prototype.hasOwnProperty.call(error.response.data, 'detail')) {
+//         message = error.response.data.detail
+//       } else { message = $t('auth.login.verification_required') }
+//     } else if (error.response.status === 404) {
+//       return Router.replace({ name: 'error' })
+//       // message = 'API Route is Missing or Undefined'
+//     } else if (error.response.status === 405) {
+//       message = 'API Route Method Not Allowed'
+//     } else if (error.response.status === 409) {
+//       message = $t('responses.errors.conflict.message')
+//     } else if (error.response.status === 400) {
+//       // Validation Message
+//       showRestQLErrorMessage(error)
+//       showError = null
+//       // message = 'В запросе к серверу используется неверный параметр или его значение.'
+//     } else if (error.response.status === 550) {
+//       // showError = null
+//       // return EventBus.$emit('protected-error', error)
+//     } else if (error.response.status >= 500) {
+//       message = $t('responses.errors.internal_server_error.message')
+//     }
+//     // Try to Use the Response Message
+//     if (Object.prototype.hasOwnProperty.call(error, 'response') &&
+//       Object.prototype.hasOwnProperty.call(error.response, 'data')) {
+//       if (Object.prototype.hasOwnProperty.call(error.response.data, 'message') &&
+//         error.response.data.message.length > 0) {
+//         message = error.response.data.message
+//       }
+//     }
+//   } else {
+//     if (error.message !== 'Network Error') {
+//       const customError = new CustomError(5000, error.message)
+//       customError.printError()
+//       return showCustomErrorMessage(customError)
+//     }
+//   }
+//   if (showError) {
+//     showErrorNotification(message)
+//   }
+//   return message
+// }

@@ -50,16 +50,16 @@
       <router-view />
     </q-page-container>
 
-    <q-footer class="bg-accent text-secondary">
-      <q-separator />
-      <app-footer></app-footer>
-    </q-footer>
+<!--    <q-footer class="bg-accent text-secondary">-->
+<!--      <q-separator />-->
+<!--      <app-footer></app-footer>-->
+<!--    </q-footer>-->
   </q-layout>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import AppFooter from '@/ui/components/Footer'
+// import AppFooter from '@/ui/components/Footer'
 import { DOCS_LINKS } from '@/constants/docs'
 
 export default {

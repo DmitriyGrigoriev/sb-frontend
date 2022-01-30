@@ -1,5 +1,5 @@
 <template id="menu">
-  <q-list dense>
+  <q-list>
     <menu-item :label="$t('shortcuts.dashboard.label')" @click="selectElement({ name: 'dashboard' })" icon="fas fa-tachometer-alt" />
 <!--    <menu-item label="Programs" @click="selectElement({ name: 'programs' })" icon="fas fa-list" v-if="!isReviewer" />-->
 <!--    <menu-item label="Projects" @click="selectElement({ name: 'projects' })" icon="fas fa-tasks" v-if="!isReviewer" />-->
@@ -44,8 +44,8 @@ export default {
     handleSignoutUser () {
       this.$q
         .dialog({
-          title: 'Logout',
-          message: 'Are you sure you want to log out?',
+          title: this.$t('components.menu.dialog.title'),
+          message: this.$t('components.menu.dialog.message'),
           cancel: true
         })
         .onOk(() => this.$store.dispatch('auth/signoutUser'))

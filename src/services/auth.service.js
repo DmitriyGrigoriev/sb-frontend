@@ -1,31 +1,18 @@
+/* eslint-disable camelcase */
 import { apiService } from './api.service'
 import { authQueries } from '@/queries'
 
-// import {
-//   REGISTER_MUTATION,
-//   LOGIN_MUTATION,
-//   LOGOUT_MUTATION,
-//   UPDATE_PASSWORD_MUTATION,
-//   RESEND_EMAIL_VERIFICATION_MUTATION,
-//   VERIFY_EMAIL_MUTATION,
-//   FORGOT_PASSWORD_MUTATION
-// } from '@/graphql/mutations';
-// import { CHECK_EMAIL_AVAILABILITY_QUERY } from '@/graphql/queries';
-
 export const authService = {
-  register ({ name, email, password, passwordConfirmation }) {
-    // return client
-    //   .mutate({
-    //     mutation: REGISTER_MUTATION,
-    //     variables: {
-    //       name: name,
-    //       email: email,
-    //       password: password,
-    //       passwordConfirmation: passwordConfirmation
-    //     }
-    //   })
-    //   .then(handleResponse)
-    //   .catch(handleError)
+  async register ({ nickname, email, password, re_password }) {
+    const query = authQueries.Register()
+    query.data.nickname = nickname
+    query.data.email = email
+    query.data.password = password
+    query.data.re_password = re_password
+
+    const response = await apiService.customRequest(query)
+
+    return response
   },
   // /**
   //  * Refresh the access token.
@@ -72,7 +59,24 @@ export const authService = {
   logout () {
     apiService.unmount401Interceptor()
   },
-  updatePassword ({ oldPassword, password, passwordConfirmation }) {
+  async ActivateUser ({ uid, token }) {
+    const query = authQueries.ActivateUser()
+    query.data.uid = uid
+    query.data.token = token
+
+    const response = await apiService.customRequest(query)
+
+    return response
+  },
+  async updatePassword ({ new_password, re_new_password, current_password }) {
+    const query = authQueries.updatePassword()
+    query.data.new_password = new_password
+    query.data.re_new_password = re_new_password
+    query.data.current_password = current_password
+
+    const response = await apiService.customRequest(query)
+
+    return response
     // return client
     //   .mutate({
     //     mutation: UPDATE_PASSWORD_MUTATION,
@@ -85,7 +89,13 @@ export const authService = {
     //   .then(handleResponse)
     //   .catch(handleError)
   },
-  forgotPassword ({ email }) {
+  async forgotPassword ({ nickname }) {
+    const query = authQueries.forgotPassword()
+    query.data.nickname = nickname
+
+    const response = await apiService.customRequest(query)
+
+    return response
     // return client
     //   .mutate({
     //     mutation: FORGOT_PASSWORD_MUTATION,

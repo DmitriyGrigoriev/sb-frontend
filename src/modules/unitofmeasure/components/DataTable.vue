@@ -14,6 +14,7 @@
       :selection="selection"
       :selected.sync="selectedRows"
       :pagination.sync="paginationModel"
+      :grid="isGrid"
       @request="onPageChange"
       @row-click="onRowClick"
     >
@@ -94,6 +95,13 @@ export default {
   computed: {
     mayDelete () {
       return this.selected.length === 0
+    },
+    isGrid () {
+      if (this.$q.platform.is.mobile !== null) {
+        return this.$q.platform.is.mobile
+      } else {
+        return false
+      }
     },
     getFilter: {
       get: function () {

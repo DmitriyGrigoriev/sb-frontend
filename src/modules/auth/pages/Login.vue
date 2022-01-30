@@ -1,14 +1,6 @@
 <template>
   <q-page padding>
     <div class="full-width column justify-center">
-      <div class="row justify-center q-my-lg">
-        <div class="column text-center">
-          <div>
-            <q-img src="vertical_on_corporate.png " width="192px" />
-          </div>
-        </div>
-      </div>
-
       <div class="row justify-center">
         <q-card bordered flat class="my-card bg-info" dark square>
           <div class="row q-pa-md text-weight-light text-h6">
@@ -23,12 +15,14 @@
 
           <q-card-section class="q-pa-md">
             <login-form v-if="tab === 'login'"></login-form>
-            <signup-form v-else></signup-form>
+            <!--The goTab event switch to login component after success registration process-->
+            <signup-form @gotab="goTab" v-else></signup-form>
           </q-card-section>
           <q-card-section class="q-gutter-md">
             <div class="text-center">
               <span
                 class="text-blue text-weight-lighter cursor-pointer"
+                v-if="tab === 'login'"
                 @click="showForgotPasswordDialog"
               >
                 {{ $t('auth.login.password_forgot') }}
@@ -38,7 +32,7 @@
               {{ $t('auth.register.no_account') }}
               <span
                 class="text-blue text-wight-bolder cursor-pointer"
-                @click="tab = 'signup'"
+                @click="goTab('signup')"
                 >{{ $t('auth.register.register') }}</span
               >
             </div>
@@ -46,7 +40,7 @@
               {{ $t('auth.register.already_registered') }}
               <span
                 class="text-blue text-weight-bolder cursor-pointer"
-                @click="tab = 'login'"
+                @click="goTab('login')"
               >
                 {{ $t('auth.login.enter') }}
               </span>
@@ -55,9 +49,6 @@
         </q-card>
       </div>
 
-      <div class="row justify-center q-my-xl">
-        &copy; 2021 Smart-Billing Programming Division
-      </div>
     </div>
   </q-page>
 </template>
@@ -66,14 +57,13 @@
 import { mapActions, mapState } from 'vuex'
 import LoginForm from '../components/LoginForm'
 import SignupForm from '../components/SignupForm'
-import { validateEmail } from '@/utils'
+// import { validateNick } from '@/utils'
 
 export default {
   name: 'PageLogin',
   components: { SignupForm, LoginForm },
   data () {
     return {
-      appTitle: 'SMART BILLING SYSTEM',
       tab: 'login'
     }
   },
@@ -81,7 +71,7 @@ export default {
     ...mapState('settings', ['dark'])
   },
   methods: {
-    ...mapActions('auth', ['forgotPassword', 'register']),
+    ...mapActions('auth', ['forgotPassword', 'checkNickName', 'register', 'clearError']),
     showForgotPasswordDialog () {
       this.$q
         .dialog({
@@ -89,15 +79,23 @@ export default {
           message: this.$t('auth.password.forgot.email'),
           prompt: {
             model: '',
-            type: 'text',
-            isValid: val => validateEmail(val)
+            type: 'text'
           },
           cancel: true,
           persistent: true
         })
-        .onOk(email => {
-          this.forgotPassword(email)
+        .onOk(nickname => {
+          this.forgotPassword(nickname)
+          // const email = this.checkNickName(nickname)
+          // if (email) {
+          //   this.forgotPassword(email)
+          // }
         })
+      // isValid: val => validateNick(val)
+    },
+    goTab (val) {
+      this.clearError()
+      this.tab = val
     }
   }
 }

@@ -1,5 +1,6 @@
-import { Loading, Dialog } from 'quasar'
+import { Loading } from 'quasar'
 import { handleError, handleResponse, HandleErrorClass } from '@/utils'
+import { translate } from '@/utils/translate'
 import {
   showErrorNotification,
   showSuccessNotification
@@ -9,25 +10,11 @@ import { profileService } from '@/services/profile.service'
 import { storageService, apiService } from '@/services'
 import { authQueries } from '@/queries'
 
-export function register ({ commit }, payload) {
-  Loading.show()
-  return authService
-    .register(payload)
-    .then(res => {
-      // commit('SET_LOADING', false)
-      console.log('response', res)
-      Dialog.create({
-        title: 'Registration Successful',
-        message: 'You have successfully registered. Please check your email.',
-        persistent: true,
-        ok: true
-      })
-    })
-    .catch(err => {
-      // commit('SET_LOADING', false)
-      commit('SET_ERROR', err.message)
-    })
-    .finally(() => Loading.hide())
+// Attempt to define `$t` in this context
+const $t = translate
+
+export function register (_, payload) {
+  return authService.register(payload)
 }
 
 export function signinUser ({ commit, dispatch }, payload) {
@@ -44,18 +31,12 @@ export function signinUser ({ commit, dispatch }, payload) {
       commit('SET_REFRESH_TOKEN', handleResponse(response).refresh)
       // commit('SET_LOADING', false)
       dispatch('getCurrentUser')
-      // this.$router.push({ path: '/dashboard' })
-      // this.$router.replace({ name: 'dashboard' })
-      // reset the store
-      // client.resetStore()
     })
     .catch(error => {
       // commit('SET_LOADING', false)
       const message = new HandleErrorClass(error).message
       commit('CLEAR_TOKEN')
       commit('SET_ERROR', message)
-      handleError(error)
-      // commit('SET_ERROR', handleError.message(error, false))
       // handleError(error)
     })
     .finally(() => Loading.hide())
@@ -76,6 +57,10 @@ export function getCurrentUser ({ commit }) {
     })
 }
 
+export function setError ({ commit }, payload) {
+  commit('SET_ERROR', payload)
+}
+
 export function clearError ({ commit }) {
   commit('CLEAR_ERROR')
 }
@@ -93,9 +78,6 @@ export async function signoutUser ({ dispatch }) {
   // see https://github.com/apollographql/apollo-cache-persist/issues/34#issuecomment-371177206 for info in purging cache
 
   // clear client store, this will not refetch queries unlike resetStore
-  // client.clearStore()
-  //
-  // persistor.purge()
   dispatch('clearStore')
   authService.logout()
 
@@ -127,22 +109,46 @@ export async function refreshToken ({ commit }) {
   return handleResponse(response).access
 }
 
-export function forgotPassword (f = {}, email) {
+export function checkNickName (f = {}, nickname) {
   Loading.show()
 
   return authService
-    .forgotPassword({ email: email })
+    .checkNickName({ nickname: nickname })
     .then(res => {
-      if (res.forgotPassword.status === 'EMAIL_NOT_SENT') {
-        showErrorNotification(res.forgotPassword.message)
+      if (res.status === 400) {
+        showErrorNotification(
+          $t('auth.password.errors.email_not_registered')
+        )
       } else {
-        showSuccessNotification({
-          message: res.forgotPassword.message
-        })
+        showSuccessNotification(
+          $t('auth.password.forgot.check_email')
+        )
       }
     })
     .catch(err => {
       console.log(err.message)
+    })
+    .finally(() => Loading.hide())
+}
+
+export function forgotPassword (f = {}, nickname) {
+  Loading.show()
+
+  return authService
+    .forgotPassword({ nickname: nickname })
+    .then(res => {
+      if (res.status === 400) {
+        showErrorNotification(
+          $t('auth.password.errors.email_not_registered')
+        )
+      } else {
+        showSuccessNotification(
+          $t('auth.password.forgot.check_email')
+        )
+      }
+    })
+    .catch(error => {
+      handleError(error)
     })
     .finally(() => Loading.hide())
 }
@@ -179,35 +185,31 @@ export function verifyEmail ({ commit, dispatch }, token) {
     .catch(err => console.error(err.message))
 }
 
-export function updatePassword ({ dispatch }, payload) {
-  Loading.show()
+export function updatePassword (_, payload) {
+  // Loading.show()
 
-  return authService
-    .updatePassword(payload)
-    .then(res => {
-      if (
-        res.updatePassword &&
-        res.updatePassword.status === 'PASSWORD_UPDATED'
-      ) {
-        dispatch('signoutUser')
-      } else {
-        return Promise.reject()
-      }
-    })
-    .catch(err => {
-      showErrorNotification(err.message)
-    })
-    .finally(() => Loading.hide())
+  return authService.updatePassword(payload)
+  // .then(res => {
+  //   showSuccessNotification($t('auth.password.set_password.success'))
+  // })
+  // .catch(err => {
+  //   showErrorNotification(err.message)
+  // })
+  // .finally(() => Loading.hide())
 }
 
-export function checkEmailAvailability (f = {}, payload) {
-  return authService
-    .checkEmailAvailability({ email: payload })
-    .then(res => {
-      return res.checkEmailAvailability.status === 'AVAILABLE'
-    })
-    .catch(err => {
-      console.log(err.message)
-      return false
-    })
+export async function ActivateUser (_, payload) {
+  return authService.ActivateUser({ uid: payload.uid, token: payload.token })
 }
+
+// export function checkEmailAvailability (f = {}, payload) {
+//   return authService
+//     .checkEmailAvailability({ email: payload })
+//     .then(res => {
+//       return res.checkEmailAvailability.status === 'AVAILABLE'
+//     })
+//     .catch(err => {
+//       console.log(err.message)
+//       return false
+//     })
+// }
