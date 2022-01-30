@@ -2,9 +2,7 @@
   <q-layout view="hhh lpR fff" class="bg-info">
     <q-header class="bg-info text-white">
       <div class="row q-pa-sm items-center justify-between">
-        <div
-          class="offset-xl-2 col-xl-8 offset-lg-3 col-lg-6 offset-md-1 col-md-10 offset-sm-1 col-sm-10 offset-xs-0 col-xs-12"
-        >
+        <div class="offset-xl-2 col-xl-8 offset-lg-3 col-lg-6 offset-md-1 col-md-10 offset-sm-1 col-sm-10 offset-xs-0 col-xs-12">
           <div class="row q-gutter-sm items-center">
 
             <img alt="favicon" src="icons/favicon-96x96.png" style="height: 40px;" />
@@ -50,20 +48,20 @@
       <router-view />
     </q-page-container>
 
-    <q-footer class="bg-accent text-secondary">
-      <q-separator />
-      <app-footer></app-footer>
-    </q-footer>
+<!--    <q-footer class="bg-accent text-secondary">-->
+<!--      <q-separator />-->
+<!--      <app-footer></app-footer>-->
+<!--    </q-footer>-->
   </q-layout>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import AppFooter from '@/ui/components/Footer'
+// import AppFooter from '@/ui/components/Footer'
 import { DOCS_LINKS } from '@/constants/docs'
 
 export default {
-  components: { AppFooter },
+  // components: { AppFooter },
   name: 'LandingLayout',
   computed: {
     ...mapGetters('auth', ['isLoggedIn'])
